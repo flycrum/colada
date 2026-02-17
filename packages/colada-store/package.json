@@ -1,0 +1,51 @@
+{
+  "name": "@repo/packages/colada-store",
+  "version": "0.0.1",
+  "description": "Vue 3 stores for global, local, and transient use",
+  "type": "module",
+  "license": "MIT",
+  "author": "",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/flycrum/colada.git",
+    "directory": "packages/colada-store"
+  },
+  "bugs": "https://github.com/flycrum/colada/issues",
+  "homepage": "https://github.com/flycrum/colada/tree/main/packages/colada-store#readme",
+  "files": [
+    "dist"
+  ],
+  "main": "./dist/colada-store.js",
+  "module": "./dist/colada-store.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/colada-store.js",
+      "default": "./dist/colada-store.js"
+    }
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "peerDependencies": {
+    "vue": "^3"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.0",
+    "@repo/configs/eslint-config": "workspace:*",
+    "@repo/configs/typescript-config": "workspace:*",
+    "typescript": "^5.7.2",
+    "vite": "^6.0.0",
+    "vite-plugin-dts": "^4.3.0",
+    "vitest": "^2.1.0",
+    "vue": "^3.5.13"
+  },
+  "scripts": {
+    "build": "vite build",
+    "dev": "vite build --watch",
+    "type-check": "tsc --noEmit && tsc -p tsconfig.node.json --noEmit",
+    "lint": "eslint .",
+    "test": "vitest run"
+  }
+}
