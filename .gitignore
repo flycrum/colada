@@ -1,0 +1,20 @@
+# Dependencies
+node_modules/
+
+# Build outputs
+dist/
+.turbo/
+
+# Test / coverage
+coverage/
+
+# Local env
+.env
+.env*.local
+*.local
+
+# IDE / OS
+.idea/
+.vscode/
+.DS_Store
+*.log
