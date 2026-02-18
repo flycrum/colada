@@ -6,11 +6,11 @@
 
 ## Categories
 
-- **configs** (tooling), **examples** (apps/demos), **packages** (publishable). Add under one. Naming: `@repo` + category + project name. Refs: [configs/eslint-config/package.json](../configs/eslint-config/package.json), [examples/colada-store-examples/package.json](../examples/colada-store-examples/package.json), [packages/colada-store/package.json](../packages/colada-store/package.json).
+- **configs** (tooling), **examples** (apps/demos), **packages** (publishable). Add under one. Package name: `@scope/package-name` (e.g. `@colada/colada-store`); directory path is separate (e.g. `packages/colada-store/`). Refs: [configs/eslint-config/package.json](../configs/eslint-config/package.json), [examples/colada-store-examples/package.json](../examples/colada-store-examples/package.json), [packages/colada-store/package.json](../packages/colada-store/package.json).
 
 ## Configs
 
-- Use [@repo/configs/eslint-config](../configs/eslint-config), [@repo/configs/prettier-config](../configs/prettier-config), [@repo/configs/typescript-config](../configs/typescript-config); devDeps + extend/import in project. No custom config.
+- Use [@colada/eslint-config](../configs/eslint-config) (dir `configs/eslint-config/`), [@colada/prettier-config](../configs/prettier-config) (dir `configs/prettier-config/`), [@colada/typescript-config](../configs/typescript-config) (dir `configs/typescript-config/`); devDeps + extend/import in project. No custom config.
 
 ## Samples
 

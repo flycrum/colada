@@ -8,13 +8,13 @@ importers:
 
   .:
     devDependencies:
-      '@repo/configs/eslint-config':
+      '@colada/eslint-config':
         specifier: workspace:*
         version: link:configs/eslint-config
-      '@repo/configs/prettier-config':
+      '@colada/prettier-config':
         specifier: workspace:*
         version: link:configs/prettier-config
-      '@repo/configs/typescript-config':
+      '@colada/typescript-config':
         specifier: workspace:*
         version: link:configs/typescript-config
       eslint:
@@ -62,20 +62,20 @@ importers:
 
   examples/colada-store-examples:
     dependencies:
-      '@repo/packages/colada-store':
+      '@colada/colada-store':
         specifier: workspace:*
         version: link:../../packages/colada-store
       vue:
         specifier: ^3.5.13
         version: 3.5.28(typescript@5.9.3)
     devDependencies:
-      '@repo/configs/eslint-config':
+      '@colada/eslint-config':
         specifier: workspace:*
         version: link:../../configs/eslint-config
-      '@repo/configs/prettier-config':
+      '@colada/prettier-config':
         specifier: workspace:*
         version: link:../../configs/prettier-config
-      '@repo/configs/typescript-config':
+      '@colada/typescript-config':
         specifier: workspace:*
         version: link:../../configs/typescript-config
       '@types/node':
@@ -96,10 +96,10 @@ importers:
 
   packages/colada-store:
     devDependencies:
-      '@repo/configs/eslint-config':
+      '@colada/eslint-config':
         specifier: workspace:*
         version: link:../../configs/eslint-config
-      '@repo/configs/typescript-config':
+      '@colada/typescript-config':
         specifier: workspace:*
         version: link:../../configs/typescript-config
       '@types/node':

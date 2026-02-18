@@ -1,1 +1,6 @@
-{"extends":"@repo/configs/typescript-config/library.json","compilerOptions":{"noEmit":true,"jsx":"preserve"},"include":["src"],"exclude":["node_modules","dist"]}
+{
+  "extends": "@colada/typescript-config/library.json",
+  "compilerOptions": { "noEmit": true, "jsx": "preserve" },
+  "include": ["src"],
+  "exclude": ["node_modules", "dist"]
+}

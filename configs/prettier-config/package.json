@@ -1,5 +1,5 @@
 {
-  "name": "@repo/configs/prettier-config",
+  "name": "@colada/prettier-config",
   "version": "0.0.0",
   "private": true,
   "type": "module",

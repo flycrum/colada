@@ -7,7 +7,7 @@
 ## External vs workspace packages
 
 - **External (npm):** From registry (e.g. vue, vite). Add with `pnpm add <pkg>` in target workspace or `--filter <workspace>`. Shared tooling in root devDeps; app/package-specific in workspace [package.json](../package.json).
-- **Workspace:** Under `configs/*`, `examples/*`, `packages/*`. Use `workspace:*` when one workspace depends on another. Name with `@repo/` scope (e.g. `@repo/packages/colada-store`). Turbo runs `^build` so dependents build after their deps.
+- **Workspace:** Under `configs/*`, `examples/*`, `packages/*`. Use `workspace:*` when one workspace depends on another. Name with `@colada/` scope using `@scope/package-name` (e.g. `@colada/colada-store`); directory path is separate (e.g. `packages/colada-store/`). Turbo runs `^build` so dependents build after their deps.
 
 ## Root overrides
 
