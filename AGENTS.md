@@ -38,9 +38,9 @@ From root: `pnpm dev`, `pnpm build`, `pnpm lint`, `pnpm format`, `pnpm type-chec
 - Do not include code examples in markdown. Use markdown links to reference actual code files instead.
 - Use markdown links to reference other related markdown files. Backlink markdown-to-markdown so references form a tree (down and back up).
 - Require a `## Purpose` section near the top of each markdown file, directly below the primary `#` heading.
-- When reading a file, AI agents must also check colocated files with the same base name but different suffix/extension (e.g. `App.vue` → `App.config.vue`, `my-utils.ts` and `my-utils.types.ts`).
-- When editing a file, AI agents must look for a colocated `.spec` file with the same base name (e.g. `App.vue` → `App.spec.ts`, `my-utils.ts` → `my-utils.spec.ts`), then run that specific test after editing to ensure it passes.
-- Before editing a file, AI agents must look for a colocated requirements file with the same base name and `.reqs.md` extension (e.g. `App.vue` → `App.reqs.md`, `my-utils.ts` → `my-utils.reqs.md`, `package.json` → `package.reqs.md`). Read and satisfy those requirements when making changes. If the agent’s instructions imply changing requirements, update the `.reqs.md` file first, then change the target file. Maintain and respect `.reqs.md` files as the source of immediate requirements and long-term vision for the file.
+- When reading a file, AI agents must also check for colocated "companion" files with the same base name but different suffix/extension (e.g. `App.vue` → `App.config.vue`, `my-utils.ts` and `my-utils.types.ts`).
+- When editing a file, AI agents must look for a colocated "companion" `.spec` file with the same base name (e.g. `App.vue` → `App.spec.ts`, `my-utils.ts` → `my-utils.spec.ts`), then run that specific test after editing to ensure it passes.
+- Before editing a file, AI agents must look for a colocated "companion" reqs/requirements file with the same base name and `.reqs.md` extension (e.g. `App.vue` → `App.reqs.md`, `my-utils.ts` → `my-utils.reqs.md`, `package.json` → `package.reqs.md`). Read and satisfy those requirements when making changes. If the agent’s instructions imply changing requirements, update the `.reqs.md` file first, then change the target file. Maintain and respect `.reqs.md` files as the source of immediate requirements and long-term vision for the file.
 
 ## How to refactor code
 
