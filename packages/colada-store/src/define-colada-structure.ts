@@ -1,89 +1,70 @@
 /**
  * defineColadaStructure – core abstraction layer for colada interfaces.
- * Typing and property mapping only; no store/state behavior in this layer.
+ * Consumes StructureAccessorsConfig; injects prior accessors into each factory context; exposes dynamic internals and _structureAccessorsConfig.
  * See [define-colada-structure.reqs.md](./define-colada-structure.reqs.md).
  */
 
-/** Base property names. Interfaces rename, disable, or wrap these. */
-export const BASE_PROPS = [
-  'key',
-  'deps',
-  'constants',
-  'state',
-  'getters',
-  'helpers',
-  'actions',
-  'hooks',
-  'constructor',
-] as const;
+import type { StructureAccessorsConfigShape } from './define-colada-structure-accessors-config-map';
 
-export type BaseProp = (typeof BASE_PROPS)[number];
+/** Instance shape: public accessors + dynamic internals (_accessorName, _structureAccessorsConfig). */
+export type StructureInstance = Record<string, unknown>;
 
 /**
- * Mapping for a single base property.
- * - string: expose under this name (rename).
- * - false: disable; exclude from interface and typings.
- * - Wrapper: extend/type the prop (e.g. constructor args); reserved for future use.
- */
-export type PropertyMapping = string | false | { wrap: (value: unknown) => unknown };
-
-/**
- * Interface config: for each base prop, specify rename (string), disable (false), or wrap.
- * Constructor: false => composable takes no args; wrap => typed init props.
- */
-export type ColadaStructureInterfaceConfig = {
-  [K in BaseProp]?: PropertyMapping;
-};
-
-/**
- * Creates the structure layer. Config drives typings and runtime remapping.
- * Returns a function that accepts the definition factory and returns the composable(s).
- * Skeleton: no reactivity, getters, actions, or lifecycle; Proxy remaps keys only.
+ * Creates the structure layer. Config defines accessors in order; each accessor's factory receives context of all prior accessors.
+ * Returns a function that accepts the definition factory and returns the composable. Skeleton: no reactivity/getters/actions logic.
  */
 export function defineColadaStructure<
-  const TInterfaceConfig extends ColadaStructureInterfaceConfig,
+  TOrderedKeys extends readonly string[],
+  TConfig extends StructureAccessorsConfigShape<TOrderedKeys>,
 >(
-  _interfaceConfig: TInterfaceConfig
+  structureAccessorsConfig: TConfig
 ): <TDefinition extends Record<string, unknown>>(
   definitionFactory: () => TDefinition
-) => { useComposable: (initProps?: unknown) => RemappedDefinition } {
+) => { useComposable: (initProps?: unknown) => StructureInstance } {
   return function createStructure<TDefinition extends Record<string, unknown>>(
     definitionFactory: () => TDefinition
   ) {
     const definition = definitionFactory();
-    const config = _interfaceConfig as Record<BaseProp, string | false | undefined>;
-    const publicToBase = new Map<string, BaseProp>();
-    const internal: Record<string, unknown> = {};
-    for (const base of BASE_PROPS) {
-      const mapping = config[base];
-      if (typeof mapping === 'string') {
-        publicToBase.set(mapping, base);
-        if (mapping in definition) internal[base] = definition[mapping];
+    const keys = structureAccessorsConfig.orderedKeys as readonly string[];
+    const resolved: Record<string, unknown> = {};
+
+    for (let i = 0; i < keys.length; i++) {
+      const key = keys[i]!;
+      const context: Record<string, unknown> = {};
+      for (let j = 0; j < i; j++) {
+        const priorKey = keys[j]!;
+        context[priorKey] = resolved[priorKey];
       }
+      const value = (definition as Record<string, unknown>)[key];
+      resolved[key] =
+        typeof value === 'function' ? (value as (ctx: unknown) => unknown)(context) : value;
     }
-    const remapped = new Proxy(internal as RemappedDefinition, {
+
+    const internal = {
+      ...resolved,
+      _structureAccessorsConfig: structureAccessorsConfig,
+    } as Record<string, unknown>;
+    for (const key of keys) {
+      (internal as Record<string, unknown>)[`_${key}`] = resolved[key];
+    }
+
+    const instance = new Proxy(internal as StructureInstance, {
       get(target, prop: string) {
-        const base = publicToBase.get(prop);
-        const key = base ?? prop;
-        return (target as Record<string, unknown>)[key];
+        return (target as Record<string, unknown>)[prop];
       },
       set(target, prop: string, value: unknown) {
-        const base = publicToBase.get(prop);
-        const key = base ?? prop;
-        (target as Record<string, unknown>)[key] = value;
+        (target as Record<string, unknown>)[prop] = value;
         return true;
       },
     });
+
     return {
       useComposable(initProps?: unknown) {
         if (initProps !== undefined) {
           // Reserved: constructor/init props applied here in full implementation.
         }
-        return remapped;
+        return instance;
       },
     };
   };
 }
-
-/** Instance shape after remapping; typed as generic for skeleton. */
-export type RemappedDefinition = Record<string, unknown>;

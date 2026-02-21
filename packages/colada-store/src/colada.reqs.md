@@ -17,7 +17,8 @@ flowchart TB
   defineColadaComposable --> defineColadaStructure
 ```
 
-- **defineColadaStructure** – Core abstraction and mapping layer. Base properties, interface config (rename/disable/wrap), typings. See [define-colada-structure.reqs.md](./define-colada-structure.reqs.md).
+- **defineColadaStructure** – Consumes StructureAccessorsConfig; injects prior accessors into each factory context; dynamic internals and \_structureAccessorsConfig. See [define-colada-structure.reqs.md](./define-colada-structure.reqs.md).
+  - **defineColadaStructureAccessorsConfigMap** – Builds ordered, typed Structure Accessors config (lookup by key and index). See [define-colada-structure-accessors-config-map.reqs.md](./define-colada-structure-accessors-config-map.reqs.md).
 - **defineColadaStore** – Store interface (id, deps, constants, state, getters, helpers, actions, hooks). Singleton/global semantics are specific to the store. See [define-colada-store.reqs.md](./define-colada-store.reqs.md).
 - **defineColadaState** – State interface (name, state, getters, helpers, actions, hooks). See [define-colada-state.reqs.md](./define-colada-state.reqs.md).
 - **defineColadaComposable** – Composable interface with constructor/init-call props. See [define-colada-composable.reqs.md](./define-colada-composable.reqs.md).

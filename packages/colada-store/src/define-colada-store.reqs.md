@@ -17,7 +17,7 @@ export const { useLoadingStore } = defineColadaStore(() => ({
   id: 'loading',
   deps: () => ({
     mediaService: mediaServiceApi,
-    user: getUser(), 
+    user: getUser(),
   }),
   constants: () => ({
     errorMessage: 'Ope, that sure didn't work 🫠'
@@ -74,15 +74,16 @@ loadingStore.hasErrorAndNotLoading();
 loadingStore.resetResults();
 loadingStore.loadMedia();
 
-// call internal
-loadingState._id;
-loadingState._deps;
-loadingState._constants;
-loadingState._state;
-loadingState._getters;
-loadingState._helpers;
-loadingState._actions;
-loadingState._hooks;
+// internals: one per accessor name from StructureAccessorsConfig, plus _structureAccessorsConfig
+loadingStore._id;
+loadingStore._deps;
+loadingStore._constants;
+loadingStore._state;
+loadingStore._getters;
+loadingStore._helpers;
+loadingStore._actions;
+loadingStore._hooks;
+loadingStore._structureAccessorsConfig;
 ```
 
 ## Requirements

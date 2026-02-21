@@ -6,10 +6,12 @@ export { defineColadaComposable } from './define-colada-composable';
 export { defineColadaState } from './define-colada-state';
 export { defineColadaStore } from './define-colada-store';
 export {
-  BASE_PROPS,
   defineColadaStructure,
-  type BaseProp,
-  type ColadaStructureInterfaceConfig,
-  type PropertyMapping,
-  type RemappedDefinition,
+  type StructureInstance,
 } from './define-colada-structure';
+export {
+  defineColadaStructureAccessorsConfigMap,
+  StructureAccessorTypes,
+  type StructureAccessorsConfigShape,
+  type StructureAccessorType,
+} from './define-colada-structure-accessors-config-map';
