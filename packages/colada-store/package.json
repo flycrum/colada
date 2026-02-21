@@ -46,6 +46,6 @@
     "dev": "vite build --watch",
     "type-check": "tsc --noEmit && tsc -p tsconfig.node.json --noEmit",
     "lint": "eslint .",
-    "test": "vitest run"
+    "test": "vitest run --typecheck"
   }
 }

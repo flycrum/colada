@@ -47,3 +47,4 @@ From root: `pnpm dev`, `pnpm build`, `pnpm lint`, `pnpm format`, `pnpm type-chec
 - **Check imports:** When adding/editing import paths, verify they're correct.
 - **Keep filenames up to date:** When renaming function/variable/type, check if filename matches (e.g. `getHelp` → `get-help.ts`); refactor filename and colocated files (`*.spec.ts`, `*.reqs.md`) together.
 - **Run tests after refactors:** ESLint and vitest on changed files (e.g. `*.spec.ts`).
+- **Type tests:** `*.test-d.ts` must verify that the library’s typings come through when calling the APIs. See [docs/testing-types.readme.md](./docs/testing-types.readme.md).
