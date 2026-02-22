@@ -1,6 +1,6 @@
 /**
  * Type tests for defineColadaState. Assert only on types that flow from calling the API.
- * See [Vitest testing types](https://vitest.dev/guide/testing-types) and [docs/testing-types.readme.md](../../../docs/testing-types.readme.md).
+ * See [Vitest testing types](https://vitest.dev/guide/testing-types) and [.docs/testing-types.readme.md](../../../.docs/testing-types.readme.md).
  */
 
 import { assertType, expectTypeOf, test } from 'vitest';
