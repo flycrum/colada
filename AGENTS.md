@@ -7,7 +7,7 @@
 - Don’t put everything in `AGENTS.md`
   - Size limits: Codex uses a cap (e.g. ~32–64 KB); Claude loads the whole file into context, so a long file uses a lot of tokens
   - Effectiveness: “Most effective AGENTS.md files have 6–10 rules and 3–5 command references. Longer files see diminishing returns—agents start ignoring buried instructions.” Target is under ~150 lines; start with 10–15 lines and iterate
-  - Prefer condensed one-liner in AGENTS.md for critical info, then link to [docs](./docs) for detailed documentation.
+  - Prefer condensed one-liner in AGENTS.md for critical info, then link to [.docs](./.docs) for detailed documentation.
 
 ## Project Tech Stack
 
@@ -15,9 +15,9 @@ VoidZero stack. Turborepo 2.x, pnpm 10.x (exclusive), TypeScript 5.x strict, Vue
 
 ## Turborepo and dependencies
 
-- [docs/turborepo-general.readme.md](./docs/turborepo-general.readme.md) – Turborepo orchestration, pnpm exclusive, root commands.
-- [docs/turborepo-dependencies.readme.md](./docs/turborepo-dependencies.readme.md) – Turborepo dependencies management, external vs workspace packages, pnpm overrides.
-- [docs/turborepo-new-workspace.readme.md](./docs/turborepo-new-workspace.readme.md) – Creating new workspaces: categories, configs, examples, packages pattern.
+- [.docs/turborepo-general.readme.md](./.docs/turborepo-general.readme.md) – Turborepo orchestration, pnpm exclusive, root commands.
+- [.docs/turborepo-dependencies.readme.md](./.docs/turborepo-dependencies.readme.md) – Turborepo dependencies management, external vs workspace packages, pnpm overrides.
+- [.docs/turborepo-new-workspace.readme.md](./.docs/turborepo-new-workspace.readme.md) – Creating new workspaces: categories, configs, examples, packages pattern.
 
 ## Code Style
 
@@ -47,4 +47,4 @@ From root: `pnpm dev`, `pnpm build`, `pnpm lint`, `pnpm format`, `pnpm type-chec
 - **Check imports:** When adding/editing import paths, verify they're correct.
 - **Keep filenames up to date:** When renaming function/variable/type, check if filename matches (e.g. `getHelp` → `get-help.ts`); refactor filename and colocated files (`*.spec.ts`, `*.reqs.md`) together.
 - **Run tests after refactors:** ESLint and vitest on changed files (e.g. `*.spec.ts`).
-- **Type tests:** `*.test-d.ts` must verify that the library’s typings come through when calling the APIs. See [docs/testing-types.readme.md](./docs/testing-types.readme.md).
+- **Type tests:** `*.test-d.ts` must verify that the library’s typings come through when calling the APIs. See [.docs/testing-types.readme.md](./.docs/testing-types.readme.md).
