@@ -1,9 +1,9 @@
 {
-  "name": "@repo/examples/colada-store-examples",
+  "name": "@colada/colada-store-examples",
   "private": true,
   "type": "module",
   "version": "0.0.0",
-  "prettier": "@repo/configs/prettier-config",
+  "prettier": "@colada/prettier-config",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
@@ -12,13 +12,13 @@
     "lint": "eslint ."
   },
   "dependencies": {
-    "@repo/packages/colada-store": "workspace:*",
+    "@colada/colada-store": "workspace:*",
     "vue": "^3.5.13"
   },
   "devDependencies": {
-    "@repo/configs/eslint-config": "workspace:*",
-    "@repo/configs/prettier-config": "workspace:*",
-    "@repo/configs/typescript-config": "workspace:*",
+    "@colada/eslint-config": "workspace:*",
+    "@colada/prettier-config": "workspace:*",
+    "@colada/typescript-config": "workspace:*",
     "@types/node": "^22.10.0",
     "@vitejs/plugin-vue": "^5.2.1",
     "eslint": "^9.15.0",

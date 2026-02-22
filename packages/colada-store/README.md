@@ -24,7 +24,6 @@ Consumed via a composable from **useColadaStore** that returns a **named store i
 ## Inspiration
 
 - **[Pinia](https://github.com/vuejs/pinia/tree/v3/packages/pinia/src)** – Options API shape (state, getters, actions) and overall source structure.
-- **[Jotai](https://github.com/pmndrs/jotai)** – Composable patterns, treating definitions as “config” until initialized, minimal primitives, and composition. No atom-based API here, but the same philosophy. Jotai’s use of a WeakMap from config → `{ value, listeners, dependents }` is a useful reference for future implementation.
 
 ## Tech
 

@@ -6,7 +6,7 @@ export default defineConfig({
   plugins: [vue()],
   resolve: {
     alias: {
-      '@repo/packages/colada-store': path.resolve(
+      '@colada/colada-store': path.resolve(
         __dirname,
         '../../packages/colada-store/dist/colada-store.js'
       ),

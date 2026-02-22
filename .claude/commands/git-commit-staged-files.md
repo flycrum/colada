@@ -74,9 +74,9 @@ Push fails → stop, report, wait. No workarounds.
 7. **Post-commit checks** (identify + report only; don’t auto-fix)
    - Committed list: `git show --name-only --pretty=format: HEAD`
    - **7a. Adjacent .md**: Same dir — same-base `.md`, `README.md`, `CHANGELOG.md`. Stale refs/examples? → `🚨🚨🚨` + paths.
-   - **7b. docs/**: Grep `docs/` for file paths, component/API names, examples. Stale? → `⚠️⚠️⚠️` + paths.
+   - **7b. .docs/**: Grep `.docs/` for file paths, component/API names, examples. Stale? → `⚠️⚠️⚠️` + paths.
    - **7c. Tests**: Expected locations — Ruby: `app/…` → `test/…_test.rb`; TS/JS/Vue: colocated `*.spec.ts`/`*.test.ts`. Exists? Needs updates for new/changed/removed? Missing for testable code? → report only.
-   - **Summary**: One line per category. `✅` up-to-date, `🟡` needs attention (short reason). Categories: adjacent .md, docs/, tests, related code. All ✅ → "in sync."
+   - **Summary**: One line per category. `✅` up-to-date, `🟡` needs attention (short reason). Categories: adjacent .md, .docs/, tests, related code. All ✅ → "in sync."
 
 ## Examples
 

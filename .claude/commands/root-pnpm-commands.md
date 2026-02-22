@@ -31,7 +31,7 @@ description: Root and pnpm command reference for the Colada monorepo
 
 ## Turbo / single workspace
 
-- `pnpm turbo run <task> --filter <workspace>` — run task in one workspace (e.g. `--filter @repo/packages/colada-store`).
+- `pnpm turbo run <task> --filter <workspace>` — run task in one workspace (e.g. `--filter @colada/colada-store`; workspace dir `packages/colada-store/`). Filter value is the package name from the workspace’s package.json.
 - From a package dir: `pnpm build`, `pnpm test`, etc. run in that workspace only.
 
 ## File-scoped (for agents)

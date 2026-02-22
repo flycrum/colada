@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { defineColadaStore } from '@repo/packages/colada-store';
+import { defineColadaStore } from '@colada/colada-store';
 import { onMounted } from 'vue';
 
 onMounted(() => {
@@ -12,8 +12,7 @@ onMounted(() => {
   <div>
     <h1>Colada Store – Vite + Vue 3</h1>
     <p>
-      This example imports <code>defineColadaStore</code> from
-      <code>@repo/packages/colada-store</code>.
+      This example imports <code>defineColadaStore</code> from <code>@colada/colada-store</code>.
     </p>
   </div>
 </template>

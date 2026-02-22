@@ -11,9 +11,9 @@
     "test": "turbo run test"
   },
   "devDependencies": {
-    "@repo/configs/eslint-config": "workspace:*",
-    "@repo/configs/prettier-config": "workspace:*",
-    "@repo/configs/typescript-config": "workspace:*",
+    "@colada/eslint-config": "workspace:*",
+    "@colada/prettier-config": "workspace:*",
+    "@colada/typescript-config": "workspace:*",
     "eslint": "^9.15.0",
     "prettier": "^3.4.2",
     "turbo": "^2.3.0",

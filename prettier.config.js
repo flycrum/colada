@@ -1,3 +1,3 @@
-import base from '@repo/configs/prettier-config';
+import base from '@colada/prettier-config';
 
 export default base;
