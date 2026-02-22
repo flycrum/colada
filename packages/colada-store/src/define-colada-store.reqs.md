@@ -88,4 +88,4 @@ loadingStore._structureAccessorsConfig;
 
 ## Requirements
 
-- direct accessing of the store via `loadingStore` should allow reading state but not writing too it directly. We should restrict and all mutations should go through `actions` and `helpers`
+- direct accessing of the store via `loadingStore` should allow reading state but not writing to it directly. We should restrict and all mutations should go through `actions` and `helpers`

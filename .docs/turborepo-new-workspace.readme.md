@@ -2,7 +2,7 @@
 
 ## Purpose
 
-- Creating new workspaces in the Colada monorepo: categories, configs, examples. Agent reference. Related: [turborepo-general.readme.md](./turborepo-general.readme.md), [turborepo-dependencies.readme.md](./turborepo-dependencies.readme.md).
+- Creating new workspaces in the Colada monorepo: categories, configs, examples. AI Agent reference. Related: [turborepo-general.readme.md](./turborepo-general.readme.md), [turborepo-dependencies.readme.md](./turborepo-dependencies.readme.md).
 
 ## Categories
 
@@ -10,7 +10,7 @@
 
 ## Configs
 
-- Use [@colada/eslint-config](../configs/eslint-config) (dir `configs/eslint-config/`), [@colada/prettier-config](../configs/prettier-config) (dir `configs/prettier-config/`), [@colada/typescript-config](../configs/typescript-config) (dir `configs/typescript-config/`); devDeps + extend/import in project. No custom config.
+- Use [@colada/eslint-config](../configs/eslint-config) (dir `configs/eslint-config/`), [@colada/prettier-config](../configs/prettier-config) (dir `configs/prettier-config/`), [@colada/typescript-config](../configs/typescript-config) (dir `configs/typescript-config/`); devDeps + extend/import in project. No custom tsconfigs.
 
 ## Samples
 

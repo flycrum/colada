@@ -60,4 +60,10 @@ describe('defineColadaStructureAccessorsConfigMap', () => {
       })
     ).toThrow(/exactly one key/);
   });
+
+  it('throws if entry has zero keys', () => {
+    expect(() =>
+      defineColadaStructureAccessorsConfigMap({} as Record<string, StructureAccessorType>)
+    ).toThrow(/exactly one key/);
+  });
 });

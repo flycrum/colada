@@ -3,21 +3,22 @@
  * See [define-colada-structure-accessors-config-map.reqs.md](./define-colada-structure-accessors-config-map.reqs.md).
  */
 
-/** Placeholder: concrete types and custom accessors are a follow-up. */
-export type StructureAccessorType = string;
-
 /** Stub constants for config map; concrete behavior per type is a follow-up. */
 export const StructureAccessorTypes = {
-  STRUCTURE_NAME: 'structure_name' as StructureAccessorType,
-  OBJECT: 'object' as StructureAccessorType,
-  OBJECT_READONLY: 'object_readonly' as StructureAccessorType,
-  OBJECT_REACTIVE_READONLY: 'object_reactive_readonly' as StructureAccessorType,
-  OBJECT_COMPUTED: 'object_computed' as StructureAccessorType,
-  METHODS_INTERNAL: 'methods_internal' as StructureAccessorType,
-  METHODS: 'methods' as StructureAccessorType,
-  HOOKS: 'hooks' as StructureAccessorType,
-  CONSTRUCTOR: 'constructor' as StructureAccessorType,
+  STRUCTURE_NAME: 'structure_name',
+  OBJECT: 'object',
+  OBJECT_READONLY: 'object_readonly',
+  OBJECT_REACTIVE_READONLY: 'object_reactive_readonly',
+  OBJECT_COMPUTED: 'object_computed',
+  METHODS_INTERNAL: 'methods_internal',
+  METHODS: 'methods',
+  HOOKS: 'hooks',
+  CONSTRUCTOR: 'constructor',
 } as const;
+
+/** Union of literal accessor types; derived from StructureAccessorTypes. */
+export type StructureAccessorType =
+  (typeof StructureAccessorTypes)[keyof typeof StructureAccessorTypes];
 
 /** Single entry: one accessor name → one type. */
 type SingleEntry = Record<string, StructureAccessorType>;
@@ -57,6 +58,7 @@ export function defineColadaStructureAccessorsConfigMap<const T extends readonly
     orderedKeys.push(key);
     map.set(key, entry[key] as StructureAccessorType);
   }
+  Object.freeze(orderedKeys);
   return {
     get(key: string) {
       return map.get(key);
