@@ -20,13 +20,17 @@ export const StructureAccessorTypes = {
 export type StructureAccessorType =
   (typeof StructureAccessorTypes)[keyof typeof StructureAccessorTypes];
 
-/** Single entry: one accessor name → one type. */
-type SingleEntry = Record<string, StructureAccessorType>;
+/** Single entry: one accessor name → one type. Public type for factory return shape. */
+export type StructureAccessorConfigEntry = Record<string, StructureAccessorType>;
 
-/** Extract ordered keys from tuple of single-key entries. */
-type OrderedKeys<T extends readonly SingleEntry[]> = {
+type SingleEntry = StructureAccessorConfigEntry;
+
+/** Extract ordered keys tuple from tuple of single-key entries. */
+export type OrderedKeysFromEntries<T extends readonly StructureAccessorConfigEntry[]> = {
   [I in keyof T]: keyof T[I] & string;
 };
+
+type OrderedKeys<T extends readonly SingleEntry[]> = OrderedKeysFromEntries<T>;
 
 /** Config shape: map + ordered keys for key and index lookup. */
 export interface StructureAccessorsConfigShape<

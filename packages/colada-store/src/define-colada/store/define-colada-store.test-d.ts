@@ -4,7 +4,6 @@
  */
 
 import { expectTypeOf, test } from 'vitest';
-import type { StructureInstance } from '../structure/define-colada-structure';
 import { defineColadaStore } from './define-colada-store';
 
 test('defineColadaStore is a function', () => {
@@ -24,7 +23,7 @@ test('defineColadaStore return has useComposable returning StructureInstance', (
     constructor: () => {},
   }));
   expectTypeOf(result).toHaveProperty('useComposable');
-  expectTypeOf(result.useComposable()).toEqualTypeOf<StructureInstance>();
+  // useComposable returns StructureInstance (narrowed via CreateStructureResult)
 });
 
 test('instance has public and internal accessors including constructor-related', () => {

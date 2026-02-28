@@ -12,7 +12,7 @@ Acessors determine shape and functionality of definition outcome. Accessors are 
 
 ### Accessor simple example
 
-defineColadaStructure accepts **structureConfigFactoryFn**: a function that receives a single context arg `{ defineColadaStructureAccessorsConfigMap, StructureAccessorTypes }` and returns the config. Build config with [defineColadaStructureAccessorsConfigMap](./define-colada-structure-accessors-config-map.ts); destructure helpers from context to avoid importing them. Context type: StructureConfigFactoryContext.
+defineColadaStructure accepts **structureConfigFactoryFn**: a function that receives a single context arg `{ StructureAccessorTypes }` and returns a tuple of single-key entries (same shape as [defineColadaStructureAccessorsConfigMap](./define-colada-structure-accessors-config-map.ts) rest args). That tuple is passed internally to defineColadaStructureAccessorsConfigMap. Context type: StructureConfigFactoryContext. Entry shape: StructureAccessorConfigEntry; keys tuple: OrderedKeysFromEntries.
 
 ### Accessor order and context
 
@@ -25,3 +25,7 @@ Instance internals are **derived from the config**: one internal `_accessorName`
 ## Typings (primary requirement)
 
 Types must be **accurate and as simple as possible**. Design for dynamic, order-dependent config and context from the ground up. No ad-hoc assertions or unsafe casts. Any change to this layer must consider typings first; document type decisions here or in-code.
+
+### Prefer `const` type parameters for narrowing
+
+Use **`const` on generic type parameters** (e.g. `const TEntries extends readonly StructureAccessorConfigEntry[]`) when the API needs to infer narrow literal types from the consumer’s argument (e.g. the tuple of accessor entries). That way the library infers the narrowest type (e.g. `readonly [{ state: ... }, { getters: ... }]`) and downstream types (OrderedKeysFromEntries, DefinitionShape, instance keys) stay precise. **Prefer this over requiring the consumer to add runtime `as const`** on their return value; the `const` modifier on the generic is the right place to enforce narrowing so consumers can write normal array literals without extra assertions.

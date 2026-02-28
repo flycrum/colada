@@ -13,6 +13,8 @@ export {
 export {
   defineColadaStructureAccessorsConfigMap,
   StructureAccessorTypes,
+  type OrderedKeysFromEntries,
+  type StructureAccessorConfigEntry,
   type StructureAccessorsConfigShape,
   type StructureAccessorType,
 } from './define-colada/structure/define-colada-structure-accessors-config-map';

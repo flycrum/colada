@@ -4,26 +4,34 @@
  * See [define-colada-composable.agents.md](./define-colada-composable.agents.md).
  */
 
+import type { CreateStructureResult, DefinitionShape } from '../structure/define-colada-structure';
 import { defineColadaStructure } from '../structure/define-colada-structure';
+
+type ComposableOrderedKeys = readonly [
+  'name',
+  'state',
+  'getters',
+  'helpers',
+  'actions',
+  'hooks',
+  'constructor',
+];
 
 /**
  * Defines a colada composable. Accepts a factory that may include constructor/init shape.
  * Returns an object with useComposable(initProps?). Skeleton only.
  */
-export function defineColadaComposable<TDefinition extends Record<string, unknown>>(
-  definitionFactory: () => TDefinition
-) {
-  const create = defineColadaStructure(
-    ({ defineColadaStructureAccessorsConfigMap, StructureAccessorTypes }) =>
-      defineColadaStructureAccessorsConfigMap(
-        { name: StructureAccessorTypes.STRUCTURE_NAME },
-        { state: StructureAccessorTypes.OBJECT_REACTIVE_READONLY },
-        { getters: StructureAccessorTypes.OBJECT_COMPUTED },
-        { helpers: StructureAccessorTypes.METHODS_INTERNAL },
-        { actions: StructureAccessorTypes.METHODS },
-        { hooks: StructureAccessorTypes.HOOKS },
-        { constructor: StructureAccessorTypes.CONSTRUCTOR }
-      )
-  );
+export function defineColadaComposable<
+  TDefinition extends DefinitionShape<ComposableOrderedKeys, TDefinition> & Record<string, unknown>,
+>(definitionFactory: () => TDefinition): CreateStructureResult<ComposableOrderedKeys> {
+  const create = defineColadaStructure(({ StructureAccessorTypes }) => [
+    { name: StructureAccessorTypes.STRUCTURE_NAME },
+    { state: StructureAccessorTypes.OBJECT_REACTIVE_READONLY },
+    { getters: StructureAccessorTypes.OBJECT_COMPUTED },
+    { helpers: StructureAccessorTypes.METHODS_INTERNAL },
+    { actions: StructureAccessorTypes.METHODS },
+    { hooks: StructureAccessorTypes.HOOKS },
+    { constructor: StructureAccessorTypes.CONSTRUCTOR },
+  ]);
   return create(definitionFactory);
 }

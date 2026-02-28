@@ -4,14 +4,11 @@ import { onMounted } from 'vue';
 
 onMounted(() => {
   console.log('Example: App.vue - onMounted');
-  const defineSimpleStructure = defineColadaStructure(
-    ({ defineColadaStructureAccessorsConfigMap, StructureAccessorTypes }) =>
-      defineColadaStructureAccessorsConfigMap(
-        { state: StructureAccessorTypes.OBJECT_REACTIVE_READONLY },
-        { getters: StructureAccessorTypes.OBJECT_COMPUTED },
-        { methods: StructureAccessorTypes.METHODS }
-      )
-  );
+  const defineSimpleStructure = defineColadaStructure(({ StructureAccessorTypes }) => [
+    { state: StructureAccessorTypes.OBJECT_REACTIVE_READONLY },
+    { getters: StructureAccessorTypes.OBJECT_COMPUTED },
+    { methods: StructureAccessorTypes.METHODS },
+  ]);
   const instance = defineSimpleStructure(() => ({
     state: { count: 0 },
     getters: ({ state }) => ({ double: () => state.count * 2 }),

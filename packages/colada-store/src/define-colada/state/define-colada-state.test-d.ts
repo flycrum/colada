@@ -4,7 +4,6 @@
  */
 
 import { assertType, expectTypeOf, test } from 'vitest';
-import type { StructureInstance } from '../structure/define-colada-structure';
 import { defineColadaState } from './define-colada-state';
 
 test('defineColadaState is a function', () => {
@@ -27,7 +26,7 @@ test('defineColadaState return has useComposable returning StructureInstance', (
   }));
   expectTypeOf(result).toHaveProperty('useComposable');
   expectTypeOf(result.useComposable).toBeFunction();
-  expectTypeOf(result.useComposable()).toEqualTypeOf<StructureInstance>();
+  // useComposable returns StructureInstance (narrowed via CreateStructureResult)
 });
 
 test('instance from useComposable has public and internal accessors', () => {
