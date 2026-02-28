@@ -5,22 +5,52 @@
  */
 
 import type { StructureAccessorsConfigShape } from './define-colada-structure-accessors-config-map';
+import {
+  defineColadaStructureAccessorsConfigMap,
+  StructureAccessorTypes,
+} from './define-colada-structure-accessors-config-map';
+
+/** Context passed to structureConfigFactoryFn; destructure to build config without importing helpers. */
+export type StructureConfigFactoryContext = {
+  defineColadaStructureAccessorsConfigMap: typeof defineColadaStructureAccessorsConfigMap;
+  StructureAccessorTypes: typeof StructureAccessorTypes;
+};
 
 /** Instance shape: public accessors + dynamic internals (_accessorName, _structureAccessorsConfig). */
 export type StructureInstance = Record<string, unknown>;
 
 /**
- * Creates the structure layer. Config defines accessors in order; each accessor's factory receives context of all prior accessors.
+ * Creates the structure layer. structureConfigFactoryFn receives context with defineColadaStructureAccessorsConfigMap and StructureAccessorTypes.
+ * Config defines accessors in order; each accessor's factory receives context of all prior accessors.
  * Returns a function that accepts the definition factory and returns the composable. Skeleton: no reactivity/getters/actions logic.
+ *
+ * @example
+ * const defineSimpleStructure = defineColadaStructure(
+ *   ({ defineColadaStructureAccessorsConfigMap, StructureAccessorTypes }) =>
+ *     defineColadaStructureAccessorsConfigMap(
+ *       { state: StructureAccessorTypes.OBJECT_REACTIVE_READONLY },
+ *       { getters: StructureAccessorTypes.OBJECT_COMPUTED },
+ *       { methods: StructureAccessorTypes.METHODS }
+ *     )
+ * );
+ * const instance = defineSimpleStructure(() => ({
+ *   state: { count: 0 },
+ *   getters: ({ state }) => ({ double: () => state.count * 2 }),
+ *   methods: ({ state, getters }) => ({ increment: () => {} }),
+ * })).useComposable();
  */
 export function defineColadaStructure<
   TOrderedKeys extends readonly string[],
   TConfig extends StructureAccessorsConfigShape<TOrderedKeys>,
 >(
-  structureAccessorsConfig: TConfig
+  structureConfigFactoryFn: (context: StructureConfigFactoryContext) => TConfig
 ): <TDefinition extends Record<string, unknown>>(
   definitionFactory: () => TDefinition
 ) => { useComposable: (initProps?: unknown) => StructureInstance } {
+  const structureAccessorsConfig = structureConfigFactoryFn({
+    defineColadaStructureAccessorsConfigMap,
+    StructureAccessorTypes,
+  });
   return function createStructure<TDefinition extends Record<string, unknown>>(
     definitionFactory: () => TDefinition
   ) {

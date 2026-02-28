@@ -3,6 +3,7 @@ export { defineColadaState } from './define-colada/state/define-colada-state';
 export { defineColadaStore } from './define-colada/store/define-colada-store';
 export {
   defineColadaStructure,
+  type StructureConfigFactoryContext,
   type StructureInstance,
 } from './define-colada/structure/define-colada-structure';
 export {

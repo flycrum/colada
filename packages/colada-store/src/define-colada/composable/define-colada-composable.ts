@@ -5,20 +5,6 @@
  */
 
 import { defineColadaStructure } from '../structure/define-colada-structure';
-import {
-  defineColadaStructureAccessorsConfigMap,
-  StructureAccessorTypes,
-} from '../structure/define-colada-structure-accessors-config-map';
-
-const COMPOSABLE_ACCESSORS_CONFIG = defineColadaStructureAccessorsConfigMap(
-  { name: StructureAccessorTypes.STRUCTURE_NAME },
-  { state: StructureAccessorTypes.OBJECT_REACTIVE_READONLY },
-  { getters: StructureAccessorTypes.OBJECT_COMPUTED },
-  { helpers: StructureAccessorTypes.METHODS_INTERNAL },
-  { actions: StructureAccessorTypes.METHODS },
-  { hooks: StructureAccessorTypes.HOOKS },
-  { constructor: StructureAccessorTypes.CONSTRUCTOR }
-);
 
 /**
  * Defines a colada composable. Accepts a factory that may include constructor/init shape.
@@ -27,6 +13,17 @@ const COMPOSABLE_ACCESSORS_CONFIG = defineColadaStructureAccessorsConfigMap(
 export function defineColadaComposable<TDefinition extends Record<string, unknown>>(
   definitionFactory: () => TDefinition
 ) {
-  const create = defineColadaStructure(COMPOSABLE_ACCESSORS_CONFIG);
+  const create = defineColadaStructure(
+    ({ defineColadaStructureAccessorsConfigMap, StructureAccessorTypes }) =>
+      defineColadaStructureAccessorsConfigMap(
+        { name: StructureAccessorTypes.STRUCTURE_NAME },
+        { state: StructureAccessorTypes.OBJECT_REACTIVE_READONLY },
+        { getters: StructureAccessorTypes.OBJECT_COMPUTED },
+        { helpers: StructureAccessorTypes.METHODS_INTERNAL },
+        { actions: StructureAccessorTypes.METHODS },
+        { hooks: StructureAccessorTypes.HOOKS },
+        { constructor: StructureAccessorTypes.CONSTRUCTOR }
+      )
+  );
   return create(definitionFactory);
 }

@@ -5,32 +5,32 @@
 
 import { assertType, expectTypeOf, test } from 'vitest';
 import { defineColadaStructure, type StructureInstance } from './define-colada-structure';
-import {
-  defineColadaStructureAccessorsConfigMap,
-  StructureAccessorTypes,
-} from './define-colada-structure-accessors-config-map';
 
 test('defineColadaStructure is a function', () => {
   expectTypeOf(defineColadaStructure).toBeFunction();
 });
 
-test('defineColadaStructure accepts config and returns a create function', () => {
-  const config = defineColadaStructureAccessorsConfigMap(
-    { id: StructureAccessorTypes.STRUCTURE_NAME },
-    { state: StructureAccessorTypes.OBJECT_REACTIVE_READONLY }
+test('defineColadaStructure accepts structureConfigFactoryFn and returns a create function', () => {
+  const create = defineColadaStructure(
+    ({ defineColadaStructureAccessorsConfigMap, StructureAccessorTypes }) =>
+      defineColadaStructureAccessorsConfigMap(
+        { id: StructureAccessorTypes.STRUCTURE_NAME },
+        { state: StructureAccessorTypes.OBJECT_REACTIVE_READONLY }
+      )
   );
-  const create = defineColadaStructure(config);
   expectTypeOf(create).toBeFunction();
   expectTypeOf(create).parameter(0).toBeFunction();
   expectTypeOf(create).parameter(0).returns.toExtend<Record<string, unknown>>();
 });
 
 test('create return type has useComposable that returns StructureInstance', () => {
-  const config = defineColadaStructureAccessorsConfigMap(
-    { id: StructureAccessorTypes.STRUCTURE_NAME },
-    { state: StructureAccessorTypes.OBJECT_REACTIVE_READONLY }
+  const create = defineColadaStructure(
+    ({ defineColadaStructureAccessorsConfigMap, StructureAccessorTypes }) =>
+      defineColadaStructureAccessorsConfigMap(
+        { id: StructureAccessorTypes.STRUCTURE_NAME },
+        { state: StructureAccessorTypes.OBJECT_REACTIVE_READONLY }
+      )
   );
-  const create = defineColadaStructure(config);
   const result = create(() => ({
     id: 'test',
     state: () => ({ count: 0 }),
@@ -48,11 +48,13 @@ test('StructureInstance is a Record with string keys and unknown values', () => 
 });
 
 test('instance from useComposable has expected accessor and internal keys', () => {
-  const config = defineColadaStructureAccessorsConfigMap(
-    { id: StructureAccessorTypes.STRUCTURE_NAME },
-    { state: StructureAccessorTypes.OBJECT_REACTIVE_READONLY }
-  );
-  const instance = defineColadaStructure(config)(() => ({
+  const instance = defineColadaStructure(
+    ({ defineColadaStructureAccessorsConfigMap, StructureAccessorTypes }) =>
+      defineColadaStructureAccessorsConfigMap(
+        { id: StructureAccessorTypes.STRUCTURE_NAME },
+        { state: StructureAccessorTypes.OBJECT_REACTIVE_READONLY }
+      )
+  )(() => ({
     id: 'my-id',
     state: () => ({ count: 0 }),
   })).useComposable();

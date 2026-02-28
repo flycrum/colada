@@ -1,9 +1,5 @@
 import { describe, expect, it } from 'vitest';
 import { defineColadaStructure } from './define-colada-structure';
-import {
-  defineColadaStructureAccessorsConfigMap,
-  StructureAccessorTypes,
-} from './define-colada-structure-accessors-config-map';
 
 describe('defineColadaStructure', () => {
   it('is a function', () => {
@@ -11,11 +7,13 @@ describe('defineColadaStructure', () => {
   });
 
   it('returns a factory that accepts a definition and returns useComposable', () => {
-    const config = defineColadaStructureAccessorsConfigMap(
-      { id: StructureAccessorTypes.STRUCTURE_NAME },
-      { state: StructureAccessorTypes.OBJECT_REACTIVE_READONLY }
+    const create = defineColadaStructure(
+      ({ defineColadaStructureAccessorsConfigMap, StructureAccessorTypes }) =>
+        defineColadaStructureAccessorsConfigMap(
+          { id: StructureAccessorTypes.STRUCTURE_NAME },
+          { state: StructureAccessorTypes.OBJECT_REACTIVE_READONLY }
+        )
     );
-    const create = defineColadaStructure(config);
     const result = create(() => ({
       id: 'test',
       state: () => ({ count: 0 }),
@@ -29,12 +27,14 @@ describe('defineColadaStructure', () => {
   });
 
   it('passes prior accessors as context to factory functions', () => {
-    const config = defineColadaStructureAccessorsConfigMap(
-      { id: StructureAccessorTypes.STRUCTURE_NAME },
-      { state: StructureAccessorTypes.OBJECT_REACTIVE_READONLY },
-      { getters: StructureAccessorTypes.OBJECT_COMPUTED }
+    const create = defineColadaStructure(
+      ({ defineColadaStructureAccessorsConfigMap, StructureAccessorTypes }) =>
+        defineColadaStructureAccessorsConfigMap(
+          { id: StructureAccessorTypes.STRUCTURE_NAME },
+          { state: StructureAccessorTypes.OBJECT_REACTIVE_READONLY },
+          { getters: StructureAccessorTypes.OBJECT_COMPUTED }
+        )
     );
-    const create = defineColadaStructure(config);
     let gettersContext: unknown = null;
     const result = create(() => ({
       id: 'my-id',
@@ -52,20 +52,28 @@ describe('defineColadaStructure', () => {
   });
 
   it('exposes _structureAccessorsConfig on instance', () => {
-    const config = defineColadaStructureAccessorsConfigMap({
-      id: StructureAccessorTypes.STRUCTURE_NAME,
-    });
-    const create = defineColadaStructure(config);
+    const create = defineColadaStructure(
+      ({ defineColadaStructureAccessorsConfigMap, StructureAccessorTypes }) =>
+        defineColadaStructureAccessorsConfigMap({
+          id: StructureAccessorTypes.STRUCTURE_NAME,
+        })
+    );
     const instance = create(() => ({ id: 'x' })).useComposable();
-    expect((instance as Record<string, unknown>)._structureAccessorsConfig).toBe(config);
+    const config = (instance as Record<string, unknown>)._structureAccessorsConfig as {
+      orderedKeys: readonly string[];
+    };
+    expect(config).toBeDefined();
+    expect(config.orderedKeys).toEqual(['id']);
   });
 
   it('exposes dynamic internals _accessorName per config key', () => {
-    const config = defineColadaStructureAccessorsConfigMap(
-      { id: StructureAccessorTypes.STRUCTURE_NAME },
-      { state: StructureAccessorTypes.OBJECT }
+    const create = defineColadaStructure(
+      ({ defineColadaStructureAccessorsConfigMap, StructureAccessorTypes }) =>
+        defineColadaStructureAccessorsConfigMap(
+          { id: StructureAccessorTypes.STRUCTURE_NAME },
+          { state: StructureAccessorTypes.OBJECT }
+        )
     );
-    const create = defineColadaStructure(config);
     const instance = create(() => ({
       id: 'store-1',
       state: () => ({ value: 10 }),

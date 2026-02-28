@@ -1,10 +1,24 @@
 <script setup lang="ts">
-import { defineColadaStore } from '@colada/colada-store';
+import { defineColadaStructure } from '@colada/colada-store';
 import { onMounted } from 'vue';
 
 onMounted(() => {
   console.log('Example: App.vue - onMounted');
-  defineColadaStore();
+  const defineSimpleStructure = defineColadaStructure(
+    ({ defineColadaStructureAccessorsConfigMap, StructureAccessorTypes }) =>
+      defineColadaStructureAccessorsConfigMap(
+        { state: StructureAccessorTypes.OBJECT_REACTIVE_READONLY },
+        { getters: StructureAccessorTypes.OBJECT_COMPUTED },
+        { methods: StructureAccessorTypes.METHODS }
+      )
+  );
+  const instance = defineSimpleStructure(() => ({
+    state: { count: 0 },
+    getters: ({ state }: { state: { count: number } }) => ({ double: () => state.count * 2 }),
+    methods: ({ state, getters }) => ({ increment: () => {} }),
+  }));
+
+  const { count, double, increment } = instance.useComposable();
 });
 </script>
 
