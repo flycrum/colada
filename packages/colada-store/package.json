@@ -35,7 +35,7 @@
     "@types/node": "^22.10.0",
     "@colada/eslint-config": "workspace:*",
     "@colada/typescript-config": "workspace:*",
-    "typescript": "^5.7.2",
+    "typescript": "5.9.3",
     "vite": "^6.0.0",
     "vite-plugin-dts": "^4.3.0",
     "vitest": "^2.1.0",
