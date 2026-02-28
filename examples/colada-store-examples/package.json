@@ -8,8 +8,9 @@
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview",
-    "type-check": "tsc --noEmit && tsc -p tsconfig.node.json --noEmit",
-    "lint": "eslint ."
+    "type-check": "vue-tsc --noEmit && tsc -p tsconfig.node.json --noEmit",
+    "lint": "eslint .",
+    "test": "pnpm run type-check"
   },
   "dependencies": {
     "@colada/colada-store": "workspace:*",
@@ -23,6 +24,7 @@
     "@vitejs/plugin-vue": "^5.2.1",
     "eslint": "^9.15.0",
     "typescript": "^5.7.2",
-    "vite": "^6.0.0"
+    "vite": "^6.0.0",
+    "vue-tsc": "^2.1.0"
   }
 }
