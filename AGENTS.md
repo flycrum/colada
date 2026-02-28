@@ -34,13 +34,21 @@ From root: `pnpm dev`, `pnpm build`, `pnpm lint`, `pnpm format`, `pnpm type-chec
 
 ## Markdown file guidelines
 
-- Keep condensed and succinct; sacrifice grammar for concision. Write markdown for AI agents.
+- **Keep documentation DRY**
 - Do not include code examples in markdown. Use markdown links to reference actual code files instead.
-- Use markdown links to reference other related markdown files. Backlink markdown-to-markdown so references form a tree (down and back up).
-- Require a `## Purpose` section near the top of each markdown file, directly below the primary `#` heading.
-- When reading a file, AI agents must also check for colocated "companion" files with the same base name but different suffix/extension (e.g. `App.vue` → `App.config.vue`, `my-utils.ts` and `my-utils.types.ts`).
-- When editing a file, AI agents must look for a colocated "companion" `.spec` file with the same base name (e.g. `App.vue` → `App.spec.ts`, `my-utils.ts` → `my-utils.spec.ts`), then run that specific test after editing to ensure it passes.
-- Before editing a file, AI agents must look for a colocated "companion" reqs/requirements file with the same base name and `.reqs.md` extension (e.g. `App.vue` → `App.reqs.md`, `my-utils.ts` → `my-utils.reqs.md`, `package.json` → `package.reqs.md`). Read and satisfy those requirements when making changes. If the agent’s instructions imply changing requirements, update the `.reqs.md` file first, then change the target file. Maintain and respect `.reqs.md` files as the source of immediate requirements and long-term vision for the file.
+- **File companions** – Companion markdown for a **specific file** uses the **same base name as that file** (no leading underscore). E.g. `registry.rs` → `registry.readme.md`; `registry.agents.md`; `App.vue` → `App.agents.md`. These colocated companion files are meant to be 1:1 representations for a main file and provide things like unit tests, ai agents content, human content, configurations, etc...depending on their extension thus purpose.
+- Before editing a file, AI agents must look for a colocated **file** companion `.agents.md` (same base name as the file, e.g. `registry.rs` → `registry.agents.md`, `App.vue` → `App.agents.md`). Read and satisfy those requirements when making changes. If the agent's instructions imply changing requirements, update the `.agents.md` file first, then change the target file. Maintain and respect `.agents.md` files as the source of immediate requirements and long-term vision for the file.
+- **Folder companions** – Companion markdown for a **folder** (describing the folder as a whole, not a single file) uses the **folder name with a leading `_`**. E.g. `domains/` → `domains/_domains.readme.md`, `domains/` → `domains/_domains.agents.md`; `src-tauri/` → `domains/_src-tauri.agents.md`. When working with files within a folder, check for these folder-level companion files and maintain the folder requirements.
+- A reminder: **do not** use a leading `_` for file companions (good: `registry.rs` → `registry.readme.md`; bad: `_registry.readme.md`). Leading `_` underscores are for folder-level companion markdown files only.
+
+### Types of markdown files
+
+- **`.agents.md`** – Written for AI Agents. Specific, hard requirements. Keep condensed succinct and without trailing punctuation; sacrifice grammar for concision. Never link back to `.readme.md`. Use `## Purpose` towards top of file; put requirements in their own `## Requirements` section (bullets). Link to code or other reqs only. Don't include diagrams. Cite specific variable/class/function names if necessary, but don't include entire code snippets.
+- **`.readme.md`** – Written for Humans. Be succinct; split short ideas into bullet points; keep details DRY by linking to other `.readme.md`. Use `## Purpose` towards top of file. Must link to colocated companion files (e.g. `.agents.md`) where they exist; do not repeat details from companion `.agents.md`. Include mermaid diagrams when they make sense. Don't include specific code examples (though CLI commands are acceptable). – Prefer brief descriptors and links to more specific markdown deeper in the tree. Backlinks are acceptable when they connect ideas.
+
+### Testing changed files
+
+- When editing a file, AI agents must look for a colocated "companion" `.spec` file with the same base name (e.g. `App.vue` → `App.spec.ts`; `App.vue` → `App.spec-d.ts`). If a colocated companion file is located, then run that specific test after editing to ensure it passes. AI agents should also evaluate whether new tests should be added, old tests should be removed, or current tests should be revised to new requirements and functionality.
 
 ## How to refactor code
 

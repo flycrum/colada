@@ -1,7 +1,7 @@
 /**
  * defineColadaComposable – composable interface with constructor/init-call props.
  * Skeleton: uses defineColadaStructure with StructureAccessorsConfig including constructor.
- * See [define-colada-composable.reqs.md](./define-colada-composable.reqs.md).
+ * See [define-colada-composable.agents.md](./define-colada-composable.agents.md).
  */
 
 import { defineColadaStructure } from './define-colada-structure';

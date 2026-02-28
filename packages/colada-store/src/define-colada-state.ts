@@ -1,7 +1,7 @@
 /**
  * defineColadaState – state interface (name, state, getters, helpers, actions, hooks).
  * Skeleton: uses defineColadaStructure with StructureAccessorsConfig; no deps/constants/constructor.
- * See [define-colada-state.reqs.md](./define-colada-state.reqs.md).
+ * See [define-colada-state.agents.md](./define-colada-state.agents.md).
  */
 
 import { defineColadaStructure } from './define-colada-structure';

@@ -1,7 +1,7 @@
 /**
  * defineColadaStore – store definition and lifecycle for colada-store.
  * Skeleton: uses defineColadaStructure with StructureAccessorsConfig (id, deps, constants, state, getters, helpers, actions, hooks, constructor).
- * Singleton/global semantics are specific to this interface. See [define-colada-store.reqs.md](./define-colada-store.reqs.md).
+ * Singleton/global semantics are specific to this interface. See [define-colada-store.agents.md](./define-colada-store.agents.md).
  */
 
 import { defineColadaStructure } from './define-colada-structure';

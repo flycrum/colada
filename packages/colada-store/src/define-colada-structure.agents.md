@@ -1,10 +1,10 @@
 # define-colada-structure
 
-Package overview: [colada.reqs.md](./colada.reqs.md).
+Package overview: [colada.agents.md](./colada.agents.md).
 
 ## Purpose
 
-Core abstraction layer for colada interfaces. Consumes a [StructureAccessorsConfig](./define-colada-structure-accessors-config-map.reqs.md) (ordered map of accessor name to StructureAccessorType). Implementations: [define-colada-store.ts](./define-colada-store.ts), [define-colada-state.ts](./define-colada-state.ts), [define-colada-composable.ts](./define-colada-composable.ts) build on this. Singleton/global behavior belongs to defineColadaStore, not this layer.
+Core abstraction layer for colada interfaces. Consumes a [StructureAccessorsConfig](./define-colada-structure-accessors-config-map.agents.md) (ordered map of accessor name to StructureAccessorType). Implementations: [define-colada-store.ts](./define-colada-store.ts), [define-colada-state.ts](./define-colada-state.ts), [define-colada-composable.ts](./define-colada-composable.ts) build on this. Singleton/global behavior belongs to defineColadaStore, not this layer.
 
 ## Structure Accessors
 

@@ -1,6 +1,6 @@
 # define-colada-store
 
-Package overview: [colada.reqs.md](./colada.reqs.md).
+Package overview: [colada.agents.md](./colada.agents.md).
 
 ## Purpose
 

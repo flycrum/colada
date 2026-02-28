@@ -1,10 +1,10 @@
 # define-colada-structure-accessors-config-map
 
-Package overview: [colada.reqs.md](./colada.reqs.md).
+Package overview: [colada.agents.md](./colada.agents.md).
 
 ## Purpose
 
-Builds the ordered, typed Structure Accessors config consumed by [define-colada-structure](./define-colada-structure.reqs.md). Accepts an ordered list of single-key entries (accessor name → StructureAccessorType) and returns a structure supporting lookup by key and by index. Order is preserved so that defineColadaStructure can inject prior accessors into each factory context.
+Builds the ordered, typed Structure Accessors config consumed by [define-colada-structure](./define-colada-structure.agents.md). Accepts an ordered list of single-key entries (accessor name → StructureAccessorType) and returns a structure supporting lookup by key and by index. Order is preserved so that defineColadaStructure can inject prior accessors into each factory context.
 
 ## Requirements
 

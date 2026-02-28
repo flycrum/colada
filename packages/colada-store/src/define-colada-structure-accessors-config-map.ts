@@ -1,6 +1,6 @@
 /**
  * defineColadaStructureAccessorsConfigMap – builds ordered, typed Structure Accessors config.
- * See [define-colada-structure-accessors-config-map.reqs.md](./define-colada-structure-accessors-config-map.reqs.md).
+ * See [define-colada-structure-accessors-config-map.agents.md](./define-colada-structure-accessors-config-map.agents.md).
  */
 
 /** Stub constants for config map; concrete behavior per type is a follow-up. */

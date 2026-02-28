@@ -1,7 +1,7 @@
 /**
  * defineColadaStructure – core abstraction layer for colada interfaces.
  * Consumes StructureAccessorsConfig; injects prior accessors into each factory context; exposes dynamic internals and _structureAccessorsConfig.
- * See [define-colada-structure.reqs.md](./define-colada-structure.reqs.md).
+ * See [define-colada-structure.agents.md](./define-colada-structure.agents.md).
  */
 
 import type { StructureAccessorsConfigShape } from './define-colada-structure-accessors-config-map';
