@@ -1,0 +1,7 @@
+{
+  "name": "plugin-example",
+  "version": "0.1.0",
+  "description": "Agent-agnostic plugin template: centralize context in rules/; thin Cursor/Claude wrappers; self-documenting example for building and maintaining AI agent plugins",
+  "author": { "name": "Colada" },
+  "keywords": ["plugin", "cursor", "claude", "rules", "skills", "agents"]
+}

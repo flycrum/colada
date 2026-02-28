@@ -1,0 +1,6 @@
+{
+  "name": "vitest",
+  "version": "0.1.0",
+  "description": "Vitest type-testing guidance: assert only on API types, *.test-d.ts, run",
+  "author": { "name": "Colada" }
+}
