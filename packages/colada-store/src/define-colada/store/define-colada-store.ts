@@ -4,11 +4,11 @@
  * Singleton/global semantics are specific to this interface. See [define-colada-store.agents.md](./define-colada-store.agents.md).
  */
 
-import { defineColadaStructure } from './define-colada-structure';
+import { defineColadaStructure } from '../structure/define-colada-structure';
 import {
   defineColadaStructureAccessorsConfigMap,
   StructureAccessorTypes,
-} from './define-colada-structure-accessors-config-map';
+} from '../structure/define-colada-structure-accessors-config-map';
 
 const STORE_ACCESSORS_CONFIG = defineColadaStructureAccessorsConfigMap(
   { id: StructureAccessorTypes.STRUCTURE_NAME },

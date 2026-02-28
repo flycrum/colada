@@ -1,11 +1,11 @@
 /**
  * Type tests for defineColadaStore. Assert only on types that flow from calling the API.
- * See [Vitest testing types](https://vitest.dev/guide/testing-types) and [.agents/plugins/vitest](../../../.agents/plugins/vitest).
+ * See [Vitest testing types](https://vitest.dev/guide/testing-types) and [.agents/plugins/vitest](../../../../.agents/plugins/vitest).
  */
 
 import { expectTypeOf, test } from 'vitest';
+import type { StructureInstance } from '../structure/define-colada-structure';
 import { defineColadaStore } from './define-colada-store';
-import type { StructureInstance } from './define-colada-structure';
 
 test('defineColadaStore is a function', () => {
   expectTypeOf(defineColadaStore).toBeFunction();

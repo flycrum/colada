@@ -4,11 +4,11 @@
  * See [define-colada-composable.agents.md](./define-colada-composable.agents.md).
  */
 
-import { defineColadaStructure } from './define-colada-structure';
+import { defineColadaStructure } from '../structure/define-colada-structure';
 import {
   defineColadaStructureAccessorsConfigMap,
   StructureAccessorTypes,
-} from './define-colada-structure-accessors-config-map';
+} from '../structure/define-colada-structure-accessors-config-map';
 
 const COMPOSABLE_ACCESSORS_CONFIG = defineColadaStructureAccessorsConfigMap(
   { name: StructureAccessorTypes.STRUCTURE_NAME },
