@@ -7,9 +7,9 @@ describe('defineColadaStructure', () => {
   });
 
   it('returns a factory that accepts a definition and returns useComposable', () => {
-    const create = defineColadaStructure(({ StructureAccessorTypes }) => [
-      { id: StructureAccessorTypes.STRUCTURE_NAME },
-      { state: StructureAccessorTypes.OBJECT_REACTIVE_READONLY },
+    const create = defineColadaStructure(({ StructureAccessorPresets }) => [
+      { id: StructureAccessorPresets.structureName },
+      { state: { type: 'object', vue: 'reactive' } },
     ]);
     const result = create(() => ({
       id: 'test',
@@ -24,10 +24,10 @@ describe('defineColadaStructure', () => {
   });
 
   it('passes prior accessors as context to factory functions', () => {
-    const create = defineColadaStructure(({ StructureAccessorTypes }) => [
-      { id: StructureAccessorTypes.STRUCTURE_NAME },
-      { state: StructureAccessorTypes.OBJECT_REACTIVE_READONLY },
-      { getters: StructureAccessorTypes.OBJECT_COMPUTED },
+    const create = defineColadaStructure(({ StructureAccessorPresets }) => [
+      { id: StructureAccessorPresets.structureName },
+      { state: { type: 'object', vue: 'reactive' } },
+      { getters: { type: 'object', vue: 'computed' } },
     ]);
     let gettersContext: unknown = null;
     const result = create(() => ({
@@ -46,8 +46,8 @@ describe('defineColadaStructure', () => {
   });
 
   it('exposes _structureAccessorsConfig on instance', () => {
-    const create = defineColadaStructure(({ StructureAccessorTypes }) => [
-      { id: StructureAccessorTypes.STRUCTURE_NAME },
+    const create = defineColadaStructure(({ StructureAccessorPresets }) => [
+      { id: StructureAccessorPresets.structureName },
     ]);
     const instance = create(() => ({ id: 'x' })).useComposable();
     const config = (instance as Record<string, unknown>)._structureAccessorsConfig as {
@@ -58,9 +58,9 @@ describe('defineColadaStructure', () => {
   });
 
   it('exposes dynamic internals _accessorName per config key', () => {
-    const create = defineColadaStructure(({ StructureAccessorTypes }) => [
-      { id: StructureAccessorTypes.STRUCTURE_NAME },
-      { state: StructureAccessorTypes.OBJECT },
+    const create = defineColadaStructure(({ StructureAccessorPresets }) => [
+      { id: StructureAccessorPresets.structureName },
+      { state: StructureAccessorPresets.objectWritable },
     ]);
     const instance = create(() => ({
       id: 'store-1',

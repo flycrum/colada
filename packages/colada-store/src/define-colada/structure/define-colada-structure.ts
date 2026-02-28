@@ -9,14 +9,12 @@ import type {
   StructureAccessorConfigEntry,
   StructureAccessorsConfigShape,
 } from './define-colada-structure-accessors-config-map';
-import {
-  defineColadaStructureAccessorsConfigMap,
-  StructureAccessorTypes,
-} from './define-colada-structure-accessors-config-map';
+import { defineColadaStructureAccessorsConfigMap } from './define-colada-structure-accessors-config-map';
+import { StructureAccessorPresets } from './define-colada-structure-accessor-presets';
 
-/** Context passed to structureConfigFactoryFn; only StructureAccessorTypes. Config map is applied internally. */
+/** Context passed to structureConfigFactoryFn; provides presets. Config map is applied internally. */
 export type StructureConfigFactoryContext = {
-  StructureAccessorTypes: typeof StructureAccessorTypes;
+  StructureAccessorPresets: typeof StructureAccessorPresets;
 };
 
 /** Extracts the ordered-keys tuple from a StructureAccessorsConfigShape. */
@@ -79,17 +77,16 @@ export interface CreateStructureResult<TOrderedKeys extends readonly string[]> {
 }
 
 /**
- * Creates the structure layer. structureConfigFactoryFn receives context with StructureAccessorTypes only;
- * it returns a tuple of single-key entries (same shape as defineColadaStructureAccessorsConfigMap's rest args).
- * That tuple is passed internally to defineColadaStructureAccessorsConfigMap. Config defines accessors in order;
- * each accessor's factory receives context of all prior accessors.
+ * Creates the structure layer. structureConfigFactoryFn receives context with StructureAccessorPresets;
+ * it returns a tuple of single-key entries (accessor name → preset or full descriptor).
+ * Config defines accessors in order; each accessor's factory receives context of all prior accessors.
  * Returns a function that accepts the definition factory and returns the composable. Skeleton: no reactivity/getters/actions logic.
  *
  * @example
- * const defineSimpleStructure = defineColadaStructure(({ StructureAccessorTypes }) => [
- *   { state: StructureAccessorTypes.OBJECT_REACTIVE_READONLY },
- *   { getters: StructureAccessorTypes.OBJECT_COMPUTED },
- *   { methods: StructureAccessorTypes.METHODS },
+ * const defineSimpleStructure = defineColadaStructure(({ StructureAccessorPresets }) => [
+ *   { state: { type: 'object', vue: 'reactive' } },
+ *   { getters: { type: 'object', vue: 'computed' } },
+ *   { methods: { type: 'function' } },
  * ]);
  * const instance = defineSimpleStructure(() => ({
  *   state: { count: 0 },
@@ -107,7 +104,7 @@ export function defineColadaStructure<
 >(
   definitionFactory: () => DefinitionShape<OrderedKeysFromEntries<TEntries>, TDefinition>
 ) => CreateStructureResult<OrderedKeysFromEntries<TEntries>> {
-  const entries = structureConfigFactoryFn({ StructureAccessorTypes });
+  const entries = structureConfigFactoryFn({ StructureAccessorPresets });
   const structureAccessorsConfig = defineColadaStructureAccessorsConfigMap(...entries);
   type TOrderedKeys = OrderedKeysFromEntries<TEntries>;
   return function createStructure<

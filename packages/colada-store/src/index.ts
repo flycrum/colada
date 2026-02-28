@@ -11,10 +11,29 @@ export {
   type StructureInstanceWithKeys,
 } from './define-colada/structure/define-colada-structure';
 export {
+  normalizeStructureAccessor,
+  StructureAccessorPresets,
+  type StructureAccessorInput,
+  type StructureAccessorPresetInput,
+} from './define-colada/structure/define-colada-structure-accessor-presets';
+export type {
+  StructureAccessorAllUnion,
+  StructureAccessorBase,
+  StructureAccessorConstructor,
+  StructureAccessorFunction,
+  StructureAccessorHooks,
+  StructureAccessorObjectBase,
+  StructureAccessorObjectReadonly,
+  StructureAccessorObjectReadonlyVueComputed,
+  StructureAccessorObjectReadonlyVueReactive,
+  StructureAccessorObjects,
+  StructureAccessorObjectWritable,
+  StructureAccessorObjectWritableVueReactive,
+  StructureAccessorString,
+} from './define-colada/structure/define-colada-structure-accessor-types';
+export {
   defineColadaStructureAccessorsConfigMap,
-  StructureAccessorTypes,
   type OrderedKeysFromEntries,
   type StructureAccessorConfigEntry,
   type StructureAccessorsConfigShape,
-  type StructureAccessorType,
 } from './define-colada/structure/define-colada-structure-accessors-config-map';

@@ -3,25 +3,12 @@
  * See [define-colada-structure-accessors-config-map.agents.md](./define-colada-structure-accessors-config-map.agents.md).
  */
 
-/** Stub constants for config map; concrete behavior per type is a follow-up. */
-export const StructureAccessorTypes = {
-  STRUCTURE_NAME: 'structure_name',
-  OBJECT: 'object',
-  OBJECT_READONLY: 'object_readonly',
-  OBJECT_REACTIVE_READONLY: 'object_reactive_readonly',
-  OBJECT_COMPUTED: 'object_computed',
-  METHODS_INTERNAL: 'methods_internal',
-  METHODS: 'methods',
-  HOOKS: 'hooks',
-  CONSTRUCTOR: 'constructor',
-} as const;
+import type { StructureAccessorInput } from './define-colada-structure-accessor-presets';
+import { normalizeStructureAccessor } from './define-colada-structure-accessor-presets';
+import type { StructureAccessorAllUnion } from './define-colada-structure-accessor-types';
 
-/** Union of literal accessor types; derived from StructureAccessorTypes. */
-export type StructureAccessorType =
-  (typeof StructureAccessorTypes)[keyof typeof StructureAccessorTypes];
-
-/** Single entry: one accessor name → one type. Public type for factory return shape. */
-export type StructureAccessorConfigEntry = Record<string, StructureAccessorType>;
+/** Single entry: one accessor name → one accessor input (preset or full descriptor). */
+export type StructureAccessorConfigEntry = Record<string, StructureAccessorInput>;
 
 type SingleEntry = StructureAccessorConfigEntry;
 
@@ -36,8 +23,8 @@ type OrderedKeys<T extends readonly SingleEntry[]> = OrderedKeysFromEntries<T>;
 export interface StructureAccessorsConfigShape<
   TOrderedKeys extends readonly string[] = readonly string[],
 > {
-  get(key: string): StructureAccessorType | undefined;
-  getByIndex(index: number): [key: string, type: StructureAccessorType] | undefined;
+  get(key: string): StructureAccessorAllUnion | undefined;
+  getByIndex(index: number): [key: string, type: StructureAccessorAllUnion] | undefined;
   orderedKeys: TOrderedKeys;
   size: number;
 }
@@ -50,24 +37,25 @@ function extractSingleKey(entry: SingleEntry): string {
 
 /**
  * Builds ordered Structure Accessors config from single-key entries.
- * Order is preserved; lookup by key and by index.
+ * Entry values are normalized (presets expanded to full descriptors). Order is preserved.
  */
 export function defineColadaStructureAccessorsConfigMap<const T extends readonly SingleEntry[]>(
   ...entries: T
 ): StructureAccessorsConfigShape<OrderedKeys<T>> {
   const orderedKeys: string[] = [];
-  const map = new Map<string, StructureAccessorType>();
+  const map = new Map<string, StructureAccessorAllUnion>();
   for (const entry of entries) {
     const key = extractSingleKey(entry);
     orderedKeys.push(key);
-    map.set(key, entry[key] as StructureAccessorType);
+    const value = entry[key] as StructureAccessorInput;
+    map.set(key, normalizeStructureAccessor(value));
   }
   Object.freeze(orderedKeys);
   return {
     get(key: string) {
       return map.get(key);
     },
-    getByIndex(index: number): [key: string, type: StructureAccessorType] | undefined {
+    getByIndex(index: number): [key: string, type: StructureAccessorAllUnion] | undefined {
       const key = orderedKeys[index];
       if (key === undefined) return undefined;
       const type = map.get(key);

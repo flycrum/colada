@@ -24,14 +24,14 @@ type ComposableOrderedKeys = readonly [
 export function defineColadaComposable<
   TDefinition extends DefinitionShape<ComposableOrderedKeys, TDefinition> & Record<string, unknown>,
 >(definitionFactory: () => TDefinition): CreateStructureResult<ComposableOrderedKeys> {
-  const create = defineColadaStructure(({ StructureAccessorTypes }) => [
-    { name: StructureAccessorTypes.STRUCTURE_NAME },
-    { state: StructureAccessorTypes.OBJECT_REACTIVE_READONLY },
-    { getters: StructureAccessorTypes.OBJECT_COMPUTED },
-    { helpers: StructureAccessorTypes.METHODS_INTERNAL },
-    { actions: StructureAccessorTypes.METHODS },
-    { hooks: StructureAccessorTypes.HOOKS },
-    { constructor: StructureAccessorTypes.CONSTRUCTOR },
+  const create = defineColadaStructure(({ StructureAccessorPresets }) => [
+    { name: StructureAccessorPresets.structureName },
+    { state: StructureAccessorPresets.stateReactiveReadonly },
+    { getters: StructureAccessorPresets.gettersComputed },
+    { helpers: StructureAccessorPresets.methodsPrivate },
+    { actions: StructureAccessorPresets.methodsPublic },
+    { hooks: StructureAccessorPresets.hooks },
+    { constructor: StructureAccessorPresets.constructor },
   ]);
   return create(definitionFactory);
 }

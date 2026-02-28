@@ -4,15 +4,15 @@ Package overview: [colada.agents.md](./colada.agents.md).
 
 ## Purpose
 
-Core abstraction layer for colada interfaces. Consumes a [StructureAccessorsConfig](./define-colada-structure-accessors-config-map.agents.md) (ordered map of accessor name to StructureAccessorType). Implementations: [define-colada-store.ts](./define-colada-store.ts), [define-colada-state.ts](./define-colada-state.ts), [define-colada-composable.ts](./define-colada-composable.ts) build on this. Singleton/global behavior belongs to defineColadaStore, not this layer.
+Core abstraction layer for colada interfaces. Consumes a [StructureAccessorsConfig](./define-colada-structure-accessors-config-map.agents.md) (ordered map of accessor name to StructureAccessorAllUnion). Implementations: [define-colada-store.ts](./define-colada-store.ts), [define-colada-state.ts](./define-colada-state.ts), [define-colada-composable.ts](./define-colada-composable.ts) build on this. Singleton/global behavior belongs to defineColadaStore, not this layer.
 
 ## Structure Accessors
 
-Acessors determine shape and functionality of definition outcome. Accessors are defined by the config: each entry is a name and a StructureAccessorType. No fixed base-props list; the config drives which accessors exist and in what order.
+Accessors determine shape and functionality of definition outcome. Accessors are defined by the config: each entry is a name and a [StructureAccessorInput](./define-colada-structure-accessor-presets.ts) (preset or full descriptor). No fixed base-props list; the config drives which accessors exist and in what order.
 
 ### Accessor simple example
 
-defineColadaStructure accepts **structureConfigFactoryFn**: a function that receives a single context arg `{ StructureAccessorTypes }` and returns a tuple of single-key entries (same shape as [defineColadaStructureAccessorsConfigMap](./define-colada-structure-accessors-config-map.ts) rest args). That tuple is passed internally to defineColadaStructureAccessorsConfigMap. Context type: StructureConfigFactoryContext. Entry shape: StructureAccessorConfigEntry; keys tuple: OrderedKeysFromEntries.
+defineColadaStructure accepts **structureConfigFactoryFn**: a function that receives a single context arg `{ StructureAccessorPresets }` and returns a tuple of single-key entries (same shape as [defineColadaStructureAccessorsConfigMap](./define-colada-structure-accessors-config-map.ts) rest args). Entry values may be preset inputs (e.g. `{ type: 'object', vue: 'reactive' }`) or full descriptors or preset consts from context. Context type: StructureConfigFactoryContext. Entry shape: StructureAccessorConfigEntry; keys tuple: OrderedKeysFromEntries.
 
 ### Accessor order and context
 

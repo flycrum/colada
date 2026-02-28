@@ -11,9 +11,9 @@ test('defineColadaStructure is a function', () => {
 });
 
 test('defineColadaStructure accepts structureConfigFactoryFn and returns a create function', () => {
-  const create = defineColadaStructure(({ StructureAccessorTypes }) => [
-    { id: StructureAccessorTypes.STRUCTURE_NAME },
-    { state: StructureAccessorTypes.OBJECT_REACTIVE_READONLY },
+  const create = defineColadaStructure(({ StructureAccessorPresets }) => [
+    { id: StructureAccessorPresets.structureName },
+    { state: { type: 'object', vue: 'reactive' } },
   ]);
   expectTypeOf(create).toBeFunction();
   expectTypeOf(create).parameter(0).toBeFunction();
@@ -21,9 +21,9 @@ test('defineColadaStructure accepts structureConfigFactoryFn and returns a creat
 });
 
 test('create return type has useComposable that returns StructureInstance', () => {
-  const create = defineColadaStructure(({ StructureAccessorTypes }) => [
-    { id: StructureAccessorTypes.STRUCTURE_NAME },
-    { state: StructureAccessorTypes.OBJECT_REACTIVE_READONLY },
+  const create = defineColadaStructure(({ StructureAccessorPresets }) => [
+    { id: StructureAccessorPresets.structureName },
+    { state: { type: 'object', vue: 'reactive' } },
   ]);
   const result = create(() => ({
     id: 'test',
@@ -42,9 +42,9 @@ test('StructureInstance is a Record with string keys and unknown values', () => 
 });
 
 test('instance from useComposable has expected accessor and internal keys', () => {
-  const instance = defineColadaStructure(({ StructureAccessorTypes }) => [
-    { id: StructureAccessorTypes.STRUCTURE_NAME },
-    { state: StructureAccessorTypes.OBJECT_REACTIVE_READONLY },
+  const instance = defineColadaStructure(({ StructureAccessorPresets }) => [
+    { id: StructureAccessorPresets.structureName },
+    { state: { type: 'object', vue: 'reactive' } },
   ])(() => ({
     id: 'my-id',
     state: () => ({ count: 0 }),
@@ -54,4 +54,26 @@ test('instance from useComposable has expected accessor and internal keys', () =
   expectTypeOf(instance).toHaveProperty('_id');
   expectTypeOf(instance).toHaveProperty('_state');
   expectTypeOf(instance).toHaveProperty('_structureAccessorsConfig');
+});
+
+test('definition factory getters and methods accept prior context types', () => {
+  const create = defineColadaStructure((context) => [
+    { state: context.StructureAccessorPresets.stateReactiveReadonly },
+    { getters: context.StructureAccessorPresets.gettersComputed },
+    { methods: context.StructureAccessorPresets.methodsPublic },
+  ]);
+  type State = { count: number };
+  type Getters = { double: () => number };
+  create(() => ({
+    state: { count: 0 },
+    getters: ({ state }: { state: State }) => {
+      const n: number = state.count;
+      return { double: (): number => n * 2 };
+    },
+    methods: ({ state, getters }: { state: State; getters: Getters }) => {
+      void state.count;
+      void getters.double();
+      return { increment: (): void => {} };
+    },
+  }));
 });
