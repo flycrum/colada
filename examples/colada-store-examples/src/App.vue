@@ -14,7 +14,7 @@ onMounted(() => {
   );
   const instance = defineSimpleStructure(() => ({
     state: { count: 0 },
-    getters: ({ state }: { state: { count: number } }) => ({ double: () => state.count * 2 }),
+    getters: ({ state }) => ({ double: () => state.count * 2 }),
     methods: ({ state, getters }) => ({ increment: () => {} }),
   }));
 
