@@ -3,7 +3,7 @@
  * When ENABLE_LOCAL_AGENT_CLAUDE=true: create or surgically update
  * .claude-plugin/marketplace.json and .claude/settings.json.
  * When false: surgically remove only our fields (clean slate).
- * Invoked by .githooks/post-merge (after git pull) and via pnpm run sync:claude-marketplace.
+ * Invoked by .githooks/post-merge (after git pull) and via pnpm run marketplace-claude-sync.
  * Uses fast-json-patch (RFC 6902) for surgical edits. On any error exits 0 so the caller never fails.
  */
 
@@ -12,7 +12,8 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
-const ROOT = path.resolve(__dirname, '..');
+/** Repo root: script lives at .agents/plugins/agents-plugin-marketplaces/scripts/ */
+const ROOT = path.resolve(__dirname, '..', '..', '..', '..');
 const MARKETPLACE_NAME = 'colada-plugins';
 const PLUGINS_DIR = path.join(ROOT, '.agents', 'plugins');
 /** Plugin dir names to exclude from all marketplace manifests (e.g. template/example only). */

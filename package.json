@@ -7,8 +7,8 @@
     "dev": "turbo run dev",
     "format": "prettier --write \"**/*.{ts,tsx,js,jsx,json,md}\"",
     "lint": "eslint .",
-    "sync:claude-marketplace": "node scripts/sync-claude-marketplace.js",
-    "sync:test:claude-marketplace": "node scripts/sync-claude-marketplace-test-all-conditions.js",
+    "marketplace-claude-sync": "node .agents/plugins/agents-plugin-marketplaces/scripts/sync-claude-marketplace.js",
+    "marketplace-claude:test-sync": "node .agents/plugins/agents-plugin-marketplaces/scripts/sync-claude-marketplace-test-all-conditions.js",
     "test": "turbo run test",
     "type-check": "turbo run type-check",
     "setup:githooks": "git config core.hooksPath .githooks"

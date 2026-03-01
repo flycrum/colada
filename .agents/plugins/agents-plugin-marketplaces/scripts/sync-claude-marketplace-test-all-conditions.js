@@ -1,7 +1,7 @@
 /**
  * Runs all sync-claude-marketplace test scenarios: backup .claude and .claude-plugin,
  * run disabled (clean slate), enabled (create), disabled (surgical remove), enabled (surgical edit),
- * then restore. Not part of vitest. Run: node scripts/sync-claude-marketplace-test-all-conditions.js
+ * then restore. Not part of vitest. Run: pnpm run marketplace-claude:test-sync
  */
 
 import { spawnSync } from 'child_process';
@@ -10,16 +10,13 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
-const ROOT = path.resolve(__dirname, '..');
+/** Repo root */
+const ROOT = path.resolve(__dirname, '..', '..', '..', '..');
 const CLAUDE_DIR = path.join(ROOT, '.claude');
 const PLUGIN_DIR = path.join(ROOT, '.claude-plugin');
 const BACKUP_CLAUDE = path.join(ROOT, '.claude-testing-123');
 const BACKUP_PLUGIN = path.join(ROOT, '.claude-plugin-testing-123');
-const SINGLE_TEST = path.join(
-  ROOT,
-  'scripts',
-  'sync-claude-marketplace-test-a-single-condition.js'
-);
+const SINGLE_TEST = path.join(__dirname, 'sync-claude-marketplace-test-a-single-condition.js');
 const testStepsAll = [
   ['disabled', 'clean slate'],
   ['enabled', 'create files'],

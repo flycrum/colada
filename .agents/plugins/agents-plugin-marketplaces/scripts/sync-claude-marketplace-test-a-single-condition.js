@@ -1,7 +1,7 @@
 /**
  * Runs sync-claude-marketplace.js with a forced enable/disable and asserts the resulting
  * filesystem state. Not part of vitest; run via sync-claude-marketplace-test-all-conditions.js
- * or directly: node scripts/sync-claude-marketplace-test-a-single-condition.js <enabled|disabled>
+ * or directly: node .agents/plugins/agents-plugin-marketplaces/scripts/sync-claude-marketplace-test-a-single-condition.js <enabled|disabled>
  */
 
 import { spawnSync } from 'child_process';
@@ -10,11 +10,12 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
-const ROOT = path.resolve(__dirname, '..');
+/** Repo root: script lives at .agents/plugins/agents-plugin-marketplaces/scripts/ */
+const ROOT = path.resolve(__dirname, '..', '..', '..', '..');
 const MARKETPLACE_NAME = 'colada-plugins';
 const MARKETPLACE_FILE = path.join(ROOT, '.claude-plugin', 'marketplace.json');
 const SETTINGS_FILE = path.join(ROOT, '.claude', 'settings.json');
-const SCRIPT = path.join(ROOT, 'scripts', 'sync-claude-marketplace.js');
+const SCRIPT = path.join(__dirname, 'sync-claude-marketplace.js');
 const SETTINGS_KEY_EXTRA_KNOWN_MARKETPLACES = 'extraKnownMarketplaces';
 const SETTINGS_KEY_ENABLED_PLUGINS = 'enabledPlugins';
 const MARKETPLACE_KEY_NAME = 'name';
