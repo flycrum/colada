@@ -67,6 +67,7 @@ From root: `pnpm dev`, `pnpm build`, `pnpm lint`, `pnpm format`, `pnpm type-chec
 - **`.agents`** – Project root directory for agent-facing config, docs, and plugins; keep agent-agnostic where possible
 - **`.agents/plugins`** – Holds plugin bundles (e.g. Cursor, Claude) that group rules, skills, commands, MCP, etc.; one subdirectory per plugin
   - [configs](./.agents/plugins/configs) – Shared config pattern: [configs/](./configs) packages (TypeScript, ESLint, Prettier, Vite, Vitest); extend/import; how to add or extend
+  - [env-variables](./.agents/plugins/env-variables) – ENABLE_LOCAL_AGENT_CLAUDE, ENABLE_LOCAL_AGENT_CURSOR; .env, .envrc; script contract
   - [turborepo](./.agents/plugins/turborepo) – Turborepo orchestration, pnpm exclusive, root commands; dependencies; creating new workspaces (categories, configs, examples, packages pattern)
   - [typescript](./.agents/plugins/typescript/README.md) – Typings: minimal/DRY/narrowed types, const type params, core-ts, type libs
   - [vitest](./.agents/plugins/vitest) – Type tests (*.spec-d.ts); assert on API types; run pnpm test

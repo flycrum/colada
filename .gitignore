@@ -8,9 +8,10 @@ dist/
 # Test / coverage
 coverage/
 
-# Local env
+# Local env (each developer owns these; never commit)
 .env
 .env*.local
+.envrc.local
 *.local
 
 # IDE / OS

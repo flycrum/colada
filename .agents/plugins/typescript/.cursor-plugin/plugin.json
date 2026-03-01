@@ -1,1 +1,7 @@
-{"name":"typescript","version":"0.1.0","description":"TypeScript typings guidance: minimal/DRY/narrowed types, const type params, core-ts, type libs","author":{"name":"Colada"},"keywords":["typescript","typings","type-fest","core-ts","narrowing"]}
+{
+  "name": "typescript",
+  "version": "0.1.0",
+  "description": "TypeScript typings guidance: minimal/DRY/narrowed types, const type params, core-ts, type libs",
+  "author": { "name": "Colada" },
+  "keywords": ["typescript", "typings", "type-fest", "core-ts", "narrowing"]
+}
