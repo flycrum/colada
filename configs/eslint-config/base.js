@@ -1,5 +1,6 @@
 import js from '@eslint/js';
 import eslintConfigPrettier from 'eslint-config-prettier';
+import eslintPluginPrettier from 'eslint-plugin-prettier';
 import tseslint from 'typescript-eslint';
 
 /**
@@ -12,5 +13,11 @@ export const config = [
   ...tseslint.configs.recommended,
   {
     ignores: ['dist/**', 'node_modules/**'],
+  },
+  {
+    plugins: { prettier: eslintPluginPrettier },
+    rules: {
+      'prettier/prettier': 'error',
+    },
   },
 ];
