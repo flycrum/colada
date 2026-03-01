@@ -25,8 +25,9 @@ From root: `pnpm dev`, `pnpm build`, `pnpm lint`, `pnpm format`, `pnpm type-chec
 
 ## Packages
 
-- [packages/colada-store](./packages/colada-store) – Vue 3 stores (global, local, transient)
 - [examples/colada-store-examples](./examples/colada-store-examples) – Vite + Vue 3 app consuming colada-store; uses shared configs
+- [packages/colada-store](./packages/colada-store) – Vue 3 stores (global, local, transient)
+- [packages/core-ts](./packages/core-ts) – Common TypeScript utils, helpers, and types; framework-agnostic (no Vue)
 
 ## Markdown file guidelines
 
@@ -54,6 +55,12 @@ From root: `pnpm dev`, `pnpm build`, `pnpm lint`, `pnpm format`, `pnpm type-chec
 - **Type tests:** `*.spec-d.ts` must verify that the library’s typings come through when calling the APIs
 - **Alphabetize lists:** New lists of data (e.g. properties, object keys) should be alphabetized. When editing existing lists, check if they are already alphabetized; if so, preserve alphabetization when adding or changing items; if not, treat the order as intentional and do not re-alphabetize
 
+### Verifying code changes
+
+- Scripts in a project's package.json should be executed with `pnpm` rather than `npx`
+- Most projects have a script that runs eslint and can auto-fix issues
+- Most projects have a script that runs both unit tests and type checks via tsc (or vue-tsc)
+
 ## Plugins for AI Agents
 
 - **Guidelines**: plugin content should be condensed, no trailing punctuation, sacrifice grammar for concision
@@ -63,4 +70,5 @@ From root: `pnpm dev`, `pnpm build`, `pnpm lint`, `pnpm format`, `pnpm type-chec
   - [turborepo](./.agents/plugins/turborepo) – Turborepo orchestration, pnpm exclusive, root commands; dependencies; creating new workspaces (categories, configs, examples, packages pattern)
   - [typescript](./.agents/plugins/typescript/README.md) – Typings: minimal/DRY/narrowed types, const type params, core-ts, type libs
   - [vitest](./.agents/plugins/vitest) – Type tests (*.spec-d.ts); assert on API types; run pnpm test
+
 

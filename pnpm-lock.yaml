@@ -164,6 +164,36 @@ importers:
         specifier: ^3.5.13
         version: 3.5.28(typescript@5.9.3)
 
+  packages/core-ts:
+    devDependencies:
+      '@colada/eslint-config':
+        specifier: workspace:*
+        version: link:../../configs/eslint-config
+      '@colada/typescript-config':
+        specifier: workspace:*
+        version: link:../../configs/typescript-config
+      '@colada/vite-config':
+        specifier: workspace:^
+        version: link:../../configs/vite-config
+      '@colada/vitest-config':
+        specifier: workspace:^
+        version: link:../../configs/vitest-config
+      '@types/node':
+        specifier: ^22.10.0
+        version: 22.19.11
+      typescript:
+        specifier: 5.9.3
+        version: 5.9.3
+      vite:
+        specifier: ^7.0.0
+        version: 7.3.1(@types/node@22.19.11)
+      vite-plugin-dts:
+        specifier: ^4.5.0
+        version: 4.5.4(@types/node@22.19.11)(rollup@4.57.1)(typescript@5.9.3)(vite@7.3.1(@types/node@22.19.11))
+      vitest:
+        specifier: ^3.2.0
+        version: 3.2.4(@types/node@22.19.11)
+
 packages:
 
   '@babel/helper-string-parser@7.27.1':

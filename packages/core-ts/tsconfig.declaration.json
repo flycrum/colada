@@ -1,0 +1,9 @@
+{
+  "extends": "@colada/typescript-config/declaration.json",
+  "compilerOptions": {
+    "outDir": "dist",
+    "rootDir": "src"
+  },
+  "include": ["src"],
+  "exclude": ["node_modules", "dist", "**/*.spec.ts", "**/*.spec-d.ts"]
+}
