@@ -13,4 +13,4 @@ Provides preset input types (StructureAccessorPresetInput) and runtime presets (
 - **Runtime presets:** StructureAccessorPresets.stateReactiveReadonly, gettersComputed, methodsPublic, methodsPrivate, structureName, constructor, hooks, objectReadonly, objectWritable, objectWritableReactive. Each satisfies the corresponding union member.
 - **normalizeStructureAccessor:** Accepts StructureAccessorInput; returns StructureAccessorAllUnion. Throws for non-object input.
 - **Typings:** Preset input types must be narrow so config entries are typed to presets or full descriptors; no loose any.
-- **Tests:** spec and test-d for presets and normalize; assert preset shapes and that normalize returns full descriptor.
+- **Tests:** spec and spec-d for presets and normalize; assert preset shapes and that normalize returns full descriptor.
