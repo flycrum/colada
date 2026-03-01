@@ -13,3 +13,4 @@ Practical steps for generating or updating a plugin (including this plugin). Age
 5. Every README in plugin: ## Purpose; state 100% for humans; AI agents can stop reading and use rules/ etc.
 6. Keep content succinct; sacrifice grammar for concision;
 7. Self-reference this plugin (\_plugin-example) when creating or updating any plugin
+8. Sync script picks up new plugins automatically: `scripts/sync-claude-marketplace.js` scans `.agents/plugins/*/.claude-plugin/plugin.json`; no hand-edit of marketplace list needed. When `ENABLE_LOCAL_AGENT_CLAUDE=true`, next `pnpm install` will include the new plugin in `.claude-plugin/marketplace.json`. See [.agents/plugins/agents-plugin-marketplaces](../../agents-plugin-marketplaces)
