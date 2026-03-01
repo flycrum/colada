@@ -38,8 +38,8 @@ const ENABLE_ARG_PREFIX = '--enable=';
 /** Env var for comma-separated plugin dir names to exclude (only when enabled). Ignored when ENABLE_LOCAL_AGENT_CLAUDE=false. */
 const ENV_CLAUDE_EXCLUDED_PLUGINS = 'CLAUDE_EXCLUDED_PLUGINS';
 
-/** Parse one or more KEY=value pairs from a line (handles "export A=b C=d" or "A=b"). */
-function parseEnvLine(line) {
+/** Parse one or more KEY=value pairs from a line (handles "export A=b C=d" or "A=b"). Skip keys in callerEnv (caller-set env wins over file). */
+function parseEnvLine(line, callerEnv) {
   const trimmed = line.trim();
   if (!trimmed || trimmed.startsWith('#')) return;
   let rest = trimmed;
@@ -66,16 +66,19 @@ function parseEnvLine(line) {
     }
     pairs.push([key, value]);
   }
-  for (const [key, value] of pairs) process.env[key] = value;
+  for (const [key, value] of pairs) {
+    if (!callerEnv.has(key)) process.env[key] = value;
+  }
 }
 
-/** Load .env and .envrc.local from repo root so script uses current file state (not parent env only). */
+/** Load .env and .envrc.local from repo root so script uses current file state (not parent env only). Env vars set by the caller (e.g. tests) are not overwritten by files. */
 function loadLocalEnv() {
+  const callerEnv = new Set(Object.keys(process.env));
   const envFiles = [path.join(ROOT, ENV_FILE), path.join(ROOT, ENVRC_LOCAL)];
   for (const file of envFiles) {
     if (!fs.existsSync(file)) continue;
     const raw = fs.readFileSync(file, 'utf8');
-    for (const line of raw.split('\n')) parseEnvLine(line);
+    for (const line of raw.split('\n')) parseEnvLine(line, callerEnv);
   }
 }
 
@@ -224,8 +227,8 @@ function enable(patch) {
     const settings = JSON.parse(fs.readFileSync(SETTINGS_FILE, 'utf8'));
     const canonicalSettings = buildCanonicalSettings(pluginIds);
     const enabledPlugins = { ...settings[SETTINGS_KEY_ENABLED_PLUGINS] };
-    for (const name of PLUGINS_EXCLUDED_FROM_MARKETPLACE) {
-      delete enabledPlugins[`${name}@${MARKETPLACE_NAME}`];
+    for (const key of Object.keys(enabledPlugins)) {
+      if (key.endsWith(`@${MARKETPLACE_NAME}`)) delete enabledPlugins[key];
     }
     Object.assign(enabledPlugins, canonicalSettings[SETTINGS_KEY_ENABLED_PLUGINS]);
     const ops = [];

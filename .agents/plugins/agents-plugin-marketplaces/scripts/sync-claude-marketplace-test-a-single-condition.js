@@ -168,7 +168,9 @@ function main() {
   }
   const withExclusions = arg.endsWith('-with-excluded-plugins');
   const enable = arg.startsWith('enabled');
-  const envOverrides = withExclusions ? { CLAUDE_EXCLUDED_PLUGINS: TEST_EXCLUDED_PLUGINS } : null;
+  const envOverrides = withExclusions
+    ? { CLAUDE_EXCLUDED_PLUGINS: TEST_EXCLUDED_PLUGINS }
+    : { CLAUDE_EXCLUDED_PLUGINS: '' };
   const result = runSync(enable, envOverrides);
   if (result.status !== 0) {
     console.error('sync-claude-marketplace.js exited with', result.status);
