@@ -1,7 +1,10 @@
+/* eslint-disable no-undef */
+
 /**
  * Runs sync-claude-marketplace.js with a forced enable/disable and asserts the resulting
  * filesystem state. Not part of vitest; run via sync-claude-marketplace-test-all-conditions.js
- * or directly: node .agents/plugins/agents-plugin-marketplaces/scripts/sync-claude-marketplace-test-a-single-condition.js <enabled|disabled>
+ * or directly: node .../sync-claude-marketplace-test-a-single-condition.js <mode>
+ * Modes: enabled | disabled | enabled-with-excluded-plugins | disabled-with-excluded-plugins
  */
 
 import { spawnSync } from 'child_process';
@@ -20,10 +23,14 @@ const SETTINGS_KEY_EXTRA_KNOWN_MARKETPLACES = 'extraKnownMarketplaces';
 const SETTINGS_KEY_ENABLED_PLUGINS = 'enabledPlugins';
 const MARKETPLACE_KEY_NAME = 'name';
 const MARKETPLACE_KEY_PLUGINS = 'plugins';
+/** Plugin dir names used in *-with-excluded-plugins tests; must exist in repo. */
+const TEST_EXCLUDED_PLUGINS = 'env-variables,turborepo';
 
-function runSync(enable) {
+function runSync(enable, envOverrides = null) {
+  const env = envOverrides ? { ...process.env, ...envOverrides } : process.env;
   const result = spawnSync(process.execPath, [SCRIPT, `--enable=${enable}`], {
     cwd: ROOT,
+    env,
     stdio: 'pipe',
     encoding: 'utf8',
   });
@@ -89,6 +96,24 @@ function assertEnabled() {
   return errors;
 }
 
+/** Assert enabled and that TEST_EXCLUDED_PLUGINS are not in marketplace.plugins. */
+function assertEnabledWithExclusions() {
+  const errors = assertEnabled();
+  if (errors.length > 0) return errors;
+  const marketplace = JSON.parse(fs.readFileSync(MARKETPLACE_FILE, 'utf8'));
+  const plugins = marketplace[MARKETPLACE_KEY_PLUGINS] || [];
+  const excludedNames = TEST_EXCLUDED_PLUGINS.split(',')
+    .map((s) => s.trim())
+    .filter(Boolean);
+  for (const name of excludedNames) {
+    const found = plugins.some(
+      (p) => p.source === `./.agents/plugins/${name}` || p.source?.endsWith(`/${name}`)
+    );
+    if (found) errors.push(`marketplace.plugins should not contain excluded plugin: ${name}`);
+  }
+  return errors;
+}
+
 function assertDisabled() {
   const errors = [];
   if (fs.existsSync(MARKETPLACE_FILE)) {
@@ -126,22 +151,34 @@ function assertDisabled() {
   return errors;
 }
 
+const VALID_MODES = [
+  'enabled',
+  'disabled',
+  'enabled-with-excluded-plugins',
+  'disabled-with-excluded-plugins',
+];
+
 function main() {
   const arg = process.argv[2];
-  if (arg !== 'enabled' && arg !== 'disabled') {
+  if (!VALID_MODES.includes(arg)) {
     console.error(
-      'Usage: node sync-claude-marketplace-test-a-single-condition.js <enabled|disabled>'
+      `Usage: node sync-claude-marketplace-test-a-single-condition.js <${VALID_MODES.join('|')}>`
     );
     process.exit(1);
   }
-  const forceEnable = arg === 'enabled';
-  const result = runSync(forceEnable);
+  const withExclusions = arg.endsWith('-with-excluded-plugins');
+  const enable = arg.startsWith('enabled');
+  const envOverrides = withExclusions ? { CLAUDE_EXCLUDED_PLUGINS: TEST_EXCLUDED_PLUGINS } : null;
+  const result = runSync(enable, envOverrides);
   if (result.status !== 0) {
     console.error('sync-claude-marketplace.js exited with', result.status);
     if (result.stderr) console.error(result.stderr);
     process.exit(1);
   }
-  const errors = forceEnable ? assertEnabled() : assertDisabled();
+  let errors = [];
+  if (arg === 'enabled') errors = assertEnabled();
+  else if (arg === 'enabled-with-excluded-plugins') errors = assertEnabledWithExclusions();
+  else errors = assertDisabled();
   if (errors.length > 0) {
     console.error(`Assertions failed (${arg}):`, errors);
     process.exit(1);

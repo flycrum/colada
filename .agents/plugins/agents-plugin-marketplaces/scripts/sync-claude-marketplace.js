@@ -35,6 +35,39 @@ const CANONICAL_MARKETPLACE_KEYS_COUNT = 3;
 const ENV_FILE = '.env';
 const ENVRC_LOCAL = '.envrc.local';
 const ENABLE_ARG_PREFIX = '--enable=';
+/** Env var for comma-separated plugin dir names to exclude (only when enabled). Ignored when ENABLE_LOCAL_AGENT_CLAUDE=false. */
+const ENV_CLAUDE_EXCLUDED_PLUGINS = 'CLAUDE_EXCLUDED_PLUGINS';
+
+/** Parse one or more KEY=value pairs from a line (handles "export A=b C=d" or "A=b"). */
+function parseEnvLine(line) {
+  const trimmed = line.trim();
+  if (!trimmed || trimmed.startsWith('#')) return;
+  let rest = trimmed;
+  if (rest.startsWith('export ')) rest = rest.slice(7).trim();
+  const pairs = [];
+  while (rest.length > 0) {
+    const keyMatch = rest.match(/^([A-Za-z_][A-Za-z0-9_]*)=/);
+    if (!keyMatch) break;
+    const key = keyMatch[1];
+    rest = rest.slice(keyMatch[0].length);
+    let value;
+    if (rest.startsWith('"')) {
+      const end = rest.indexOf('"', 1);
+      value = end === -1 ? rest : rest.slice(1, end);
+      rest = end === -1 ? '' : rest.slice(end + 1).trim();
+    } else if (rest.startsWith("'")) {
+      const end = rest.indexOf("'", 1);
+      value = end === -1 ? rest : rest.slice(1, end);
+      rest = end === -1 ? '' : rest.slice(end + 1).trim();
+    } else {
+      const unquoted = rest.match(/^(\S+)/);
+      value = unquoted ? unquoted[1] : rest;
+      rest = unquoted ? rest.slice(unquoted[1].length).trim() : '';
+    }
+    pairs.push([key, value]);
+  }
+  for (const [key, value] of pairs) process.env[key] = value;
+}
 
 /** Load .env and .envrc.local from repo root so script uses current file state (not parent env only). */
 function loadLocalEnv() {
@@ -42,24 +75,7 @@ function loadLocalEnv() {
   for (const file of envFiles) {
     if (!fs.existsSync(file)) continue;
     const raw = fs.readFileSync(file, 'utf8');
-    for (const line of raw.split('\n')) {
-      const trimmed = line.trim();
-      if (!trimmed || trimmed.startsWith('#')) continue;
-      const exportMatch = trimmed.match(/^export\s+([A-Za-z_][A-Za-z0-9_]*)=(.*)$/);
-      const plainMatch = trimmed.match(/^([A-Za-z_][A-Za-z0-9_]*)=(.*)$/);
-      const match = exportMatch || plainMatch;
-      if (match) {
-        const key = match[1];
-        let value = match[2].trim();
-        if (
-          (value.startsWith('"') && value.endsWith('"')) ||
-          (value.startsWith("'") && value.endsWith("'"))
-        ) {
-          value = value.slice(1, -1);
-        }
-        process.env[key] = value;
-      }
-    }
+    for (const line of raw.split('\n')) parseEnvLine(line);
   }
 }
 
@@ -68,12 +84,54 @@ function readEnv(key, def = 'false') {
   return v === undefined || v === '' ? def : v;
 }
 
+/** Plugin dir names from CLAUDE_EXCLUDED_PLUGINS (comma-separated). Only applied when enabled; safe to set when disabled. */
+function getExcludedPluginsFromEnv() {
+  const raw = process.env[ENV_CLAUDE_EXCLUDED_PLUGINS];
+  if (raw === undefined || raw === '') return [];
+  return raw
+    .split(',')
+    .map((s) => s.trim())
+    .filter(Boolean);
+}
+
+/** Set of plugin dir names that exist under PLUGINS_DIR with .claude-plugin/plugin.json (excluding only hardcoded list). */
+function listActualPluginDirNames() {
+  const entries = fs.readdirSync(PLUGINS_DIR, { withFileTypes: true });
+  const names = new Set();
+  for (const ent of entries) {
+    if (!ent.isDirectory()) continue;
+    if (PLUGINS_EXCLUDED_FROM_MARKETPLACE.includes(ent.name)) continue;
+    const manifestPath = path.join(
+      PLUGINS_DIR,
+      ent.name,
+      CLAUDE_PLUGIN_SUBDIR,
+      PLUGIN_MANIFEST_FILENAME
+    );
+    if (fs.existsSync(manifestPath)) names.add(ent.name);
+  }
+  return names;
+}
+
+/** Report CLAUDE_EXCLUDED_PLUGINS names that are not found (typo, renamed). Non-existent names are allowed; we only report. */
+function reportUnknownExcludedPlugins() {
+  const fromEnv = getExcludedPluginsFromEnv();
+  if (fromEnv.length === 0) return;
+  const actual = listActualPluginDirNames();
+  const unknown = fromEnv.filter((name) => !actual.has(name));
+  if (unknown.length > 0) {
+    process.stderr.write(
+      `CLAUDE_EXCLUDED_PLUGINS: unknown or non-existent plugin name(s) (typo/renamed?): ${unknown.join(', ')}\n`
+    );
+  }
+}
+
 function discoverPlugins() {
+  const excluded = [...PLUGINS_EXCLUDED_FROM_MARKETPLACE, ...getExcludedPluginsFromEnv()];
   const entries = fs.readdirSync(PLUGINS_DIR, { withFileTypes: true });
   const plugins = [];
   for (const ent of entries) {
     if (!ent.isDirectory()) continue;
-    if (PLUGINS_EXCLUDED_FROM_MARKETPLACE.includes(ent.name)) continue;
+    if (excluded.includes(ent.name)) continue;
     const manifestPath = path.join(
       PLUGINS_DIR,
       ent.name,
@@ -272,8 +330,10 @@ async function main() {
       forceEnable !== null
         ? forceEnable
         : readEnv('ENABLE_LOCAL_AGENT_CLAUDE', 'false').toLowerCase() === 'true';
-    if (enabled) enable(patch);
-    else disable(patch);
+    if (enabled) {
+      reportUnknownExcludedPlugins();
+      enable(patch);
+    } else disable(patch);
   } catch {
     process.exit(0);
   }

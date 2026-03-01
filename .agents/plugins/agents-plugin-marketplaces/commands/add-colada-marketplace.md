@@ -10,7 +10,7 @@ Get the Colada plugin marketplace (colada-plugins) and all its plugins available
 
 ## Steps (only opt-in + one-time setup are manual)
 
-1. **Opt-in:** Copy root [.env.example](../../../../.env.example) to **.envrc.local** (gitignored; you own it, never commit). Set `ENABLE_LOCAL_AGENT_CLAUDE=true` there. With [direnv](https://direnv.net/), root [.envrc](../../../../.envrc) loads `.envrc.local` when you `cd` into the repo.
+1. **Opt-in:** Copy root [.env.example](../../../../.env.example) to **.envrc.local** (gitignored; you own it, never commit). Set `ENABLE_LOCAL_AGENT_CLAUDE=true` there. Optionally set `CLAUDE_EXCLUDED_PLUGINS=env-variables,turborepo` (comma-separated plugin dir names) to exclude specific plugins; only applied when enabled; safe to keep when toggling to false. With [direnv](https://direnv.net/), root [.envrc](../../../../.envrc) loads `.envrc.local` when you `cd` into the repo.
 
 2. **Enable git hooks (once per clone):** From repo root run **`pnpm run setup:githooks`**. This sets `git config core.hooksPath .githooks` so the repo’s [.githooks](../../../../.githooks) run. The **post-merge** hook then runs [scripts/sync-claude-marketplace.js](../scripts/sync-claude-marketplace.js) after every successful **git pull** (when pull does a merge), creating/updating `.claude-plugin/marketplace.json` and `.claude/settings.json` per your env. If you haven’t pulled yet after enabling hooks, run **`pnpm run marketplace-claude-sync`** once to sync now.
 

@@ -1,3 +1,5 @@
+/* eslint-disable no-undef */
+
 /**
  * Runs all sync-claude-marketplace test scenarios: backup .claude and .claude-plugin,
  * run disabled (clean slate), enabled (create), disabled (surgical remove), enabled (surgical edit),
@@ -22,6 +24,14 @@ const testStepsAll = [
   ['enabled', 'create files'],
   ['disabled', 'surgical remove'],
   ['enabled', 'surgical edit on existing'],
+  [
+    'disabled-with-excluded-plugins',
+    'disabled with CLAUDE_EXCLUDED_PLUGINS set (exclusions ignored)',
+  ],
+  [
+    'enabled-with-excluded-plugins',
+    'enabled with CLAUDE_EXCLUDED_PLUGINS (env-variables,turborepo excluded)',
+  ],
 ];
 
 function renameIfExists(from, to) {

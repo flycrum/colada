@@ -9,20 +9,20 @@
     "lint": "eslint .",
     "marketplace-claude-sync": "node .agents/plugins/agents-plugin-marketplaces/scripts/sync-claude-marketplace.js",
     "marketplace-claude:test-sync": "node .agents/plugins/agents-plugin-marketplaces/scripts/sync-claude-marketplace-test-all-conditions.js",
+    "setup:githooks": "git config core.hooksPath .githooks",
     "test": "turbo run test",
-    "type-check": "turbo run type-check",
-    "setup:githooks": "git config core.hooksPath .githooks"
+    "type-check": "turbo run type-check"
   },
   "devDependencies": {
     "@colada/eslint-config": "workspace:*",
     "@colada/prettier-config": "workspace:*",
     "@colada/typescript-config": "workspace:*",
     "eslint": "^9.15.0",
+    "fast-json-patch": "^3.1.1",
     "globals": "^15.12.0",
     "prettier": "^3.4.2",
     "turbo": "^2.3.0",
-    "typescript": "5.9.3",
-    "fast-json-patch": "^3.1.1"
+    "typescript": "5.9.3"
   },
   "packageManager": "pnpm@10.0.0",
   "engines": {

@@ -14,8 +14,8 @@ description: Enable or disable local Claude and/or Cursor agent marketplace setu
 ## Instructions
 
 1. **Infer intent** from the prompt:
-   - Enable Claude local marketplace/sync → `ENABLE_LOCAL_AGENT_CLAUDE=true`
-   - Disable Claude local marketplace/sync → `ENABLE_LOCAL_AGENT_CLAUDE=false`
+   - Enable Claude local marketplace/sync → `ENABLE_LOCAL_AGENT_CLAUDE=true`; optionally `CLAUDE_EXCLUDED_PLUGINS=env-variables,turborepo` (comma-separated) to exclude specific plugins
+   - Disable Claude local marketplace/sync → `ENABLE_LOCAL_AGENT_CLAUDE=false` (CLAUDE_EXCLUDED_PLUGINS is ignored when false; safe to leave set)
    - Enable Cursor-related local config (documented only; no script today) → `ENABLE_LOCAL_AGENT_CURSOR=true`
    - Disable Cursor → `ENABLE_LOCAL_AGENT_CURSOR=false`
    - Unclear or "both" → recommend both; default suggestion: Claude true, Cursor false unless they say otherwise

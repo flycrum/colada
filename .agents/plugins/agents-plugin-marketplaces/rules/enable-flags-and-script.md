@@ -1,5 +1,6 @@
 # ENABLE_LOCAL_AGENT_CLAUDE / ENABLE_LOCAL_AGENT_CURSOR
 
+- **Optional exclusions:** When enabled, `CLAUDE_EXCLUDED_PLUGINS` (comma-separated plugin dir names, e.g. `env-variables,turborepo`) excludes those plugins from the marketplace; when disabled the var is ignored so you can keep it in .envrc.local
 - **Git post-merge hook** (in [.githooks/post-merge](../../../.githooks/post-merge)) runs [scripts/sync-claude-marketplace.js](../scripts/sync-claude-marketplace.js) after a successful **git pull** (when pull merges). Enable once per clone: **`pnpm run setup:githooks`** (sets `core.hooksPath` to `.githooks`). Script reads `ENABLE_LOCAL_AGENT_CLAUDE` (default false) from `.envrc.local` / `.env`. If you only changed `.envrc.local` and haven’t pulled, run **`pnpm run marketplace-claude-sync`** once. Manual test: [commands/manual-test-pnpm-install-sync.md](../commands/manual-test-pnpm-install-sync.md) (doc still references pnpm for comparison; sync is now triggered by post-merge).
 - When `true`: create or surgically update `.claude-plugin/marketplace.json` and `.claude/settings.json` (only our keys); when `false`: surgically remove those same fields (clean slate)
 - Four combos: true/true, true/false, false/true, false/false; Cursor has no script, flag is documented for future use
