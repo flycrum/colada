@@ -63,12 +63,12 @@ From root: `pnpm dev`, `pnpm build`, `pnpm lint`, `pnpm format`, `pnpm type-chec
 
 ## Plugins for AI Agents
 
-- **Guidelines**: plugin content should be condensed, no trailing punctuation, sacrifice grammar for concision
+- **Guidelines**: plugin content condensed, no trailing punctuation, sacrifice grammar for concision
 - **`.agents`** – Project root directory for agent-facing config, docs, and plugins; keep agent-agnostic where possible
-- **`.agents/plugins`** – Holds plugin bundles (e.g. Cursor, Claude) that group rules, skills, commands, MCP, etc.; one subdirectory per plugin
-  - [agents-plugin-marketplaces](./.agents/plugins/agents-plugin-marketplaces) – Self-host Claude/Cursor plugins without publishing; env-gated sync script, clean slate; automatic (opt-in via ENABLE_LOCAL_AGENT_CLAUDE only; no manual /plugin steps)
-  - [configs](./.agents/plugins/configs) – Shared config pattern: [configs/](./configs) packages (TypeScript, ESLint, Prettier, Vite, Vitest); extend/import; how to add or extend
-  - [env-variables](./.agents/plugins/env-variables) – ENABLE_LOCAL_AGENT_CLAUDE, ENABLE_LOCAL_AGENT_CURSOR; .env, .envrc; script contract
-  - [turborepo](./.agents/plugins/turborepo) – Turborepo orchestration, pnpm exclusive, root commands; dependencies; creating new workspaces (categories, configs, examples, packages pattern)
-  - [typescript](./.agents/plugins/typescript/README.md) – Typings: minimal/DRY/narrowed types, const type params, core-ts, type libs
-  - [vitest](./.agents/plugins/vitest) – Type tests (\*.spec-d.ts); assert on API types; run pnpm test
+- **`.agents/plugins`** – Plugin bundles (Cursor, Claude): one subdirectory per plugin. Each plugin root: **README.md** (## Purpose only) and **AGENTS.md** (## Purpose + optional ## Requirements); no AGENTS.md in sub-folders unless a plugin needs specific requirements (rare)
+  - [agents-plugin-marketplaces](./.agents/plugins/agents-plugin-marketplaces) – Self-host Claude/Cursor plugins without publishing; env-gated sync, clean slate; opt-in via ENABLE_LOCAL_AGENT_CLAUDE only
+  - [configs](./.agents/plugins/configs) – Shared config: [configs/](./configs); extend/import; how to add or extend
+  - [env-variables](./.agents/plugins/env-variables) – ENABLE_LOCAL_AGENT_*; .env, .envrc; script contract
+  - [turborepo](./.agents/plugins/turborepo) – Turborepo, pnpm; dependencies; creating new workspaces
+  - [typescript](./.agents/plugins/typescript) – Typings: minimal/DRY/narrowed types, const type params, core-ts, type libs
+  - [vitest](./.agents/plugins/vitest) – Type tests (*.spec-d.ts); assert on API types; pnpm test

@@ -2,7 +2,7 @@
 
 ## Purpose
 
-All plugin context (Cursor: rules; Claude Code: rough equivalent CLAUDE.md) lives in **rules/**. No AGENTS.md in plugins. Context and "rules" terminology are interchangeable.
+All plugin context (Cursor: rules; Claude Code: rough equivalent CLAUDE.md) lives in **rules/**. One **AGENTS.md** at plugin root only (Purpose + optional Requirements); no AGENTS.md in sub-folders. Context and "rules" terminology are interchangeable.
 
 ## Contained unit
 
