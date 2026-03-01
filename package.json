@@ -7,7 +7,9 @@
     "dev": "turbo run dev",
     "format": "prettier --write \"**/*.{ts,tsx,js,jsx,json,md}\"",
     "lint": "eslint .",
-    "postinstall": "node scripts/sync-claude-marketplace.js",
+    "pnpm:devPreinstall": "node scripts/sync-claude-marketplace.js",
+    "sync:claude-marketplace": "node scripts/sync-claude-marketplace.js",
+    "sync:test:claude-marketplace": "node scripts/sync-claude-marketplace-test-all-conditions.js",
     "test": "turbo run test",
     "type-check": "turbo run type-check"
   },
