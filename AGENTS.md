@@ -15,14 +15,6 @@ A single, condensed `AGENTS.md` for this monorepo's tech stack, packages, and ho
 
 VoidZero stack. Turborepo 2.x, pnpm 10.x (exclusive), TypeScript 5.x strict, Vue 3.x, Vite 6.x, Vitest 2.x, ESLint 9.x flat config, Prettier 3.x. Config sources: [configs/](./configs) (eslint, prettier, typescript, vite, vitest). Root: [package.json](./package.json), [turbo.json](./turbo.json)
 
-## Turborepo and dependencies
-
-- [.agents/plugins/turborepo](./.agents/plugins/turborepo) – Turborepo orchestration, pnpm exclusive, root commands; dependencies; creating new workspaces (categories, configs, examples, packages pattern)
-
-## Configs (DRY)
-
-- [.agents/plugins/configs](./.agents/plugins/configs) – Shared config pattern: [configs/](./configs) packages (TypeScript, ESLint, Prettier, Vite, Vitest); extend/import; how to add or extend. Use when adding or changing workspace or shared config
-
 ## Code Style
 
 ESM only; TypeScript strict, no `any`; format via shared Prettier. See [configs](./configs)
@@ -59,29 +51,16 @@ From root: `pnpm dev`, `pnpm build`, `pnpm lint`, `pnpm format`, `pnpm type-chec
 - **Check imports:** When adding/editing import paths, verify they're correct
 - **Keep filenames up to date:** When renaming function/variable/type, check if filename matches (e.g. `getHelp` → `get-help.ts`); refactor filename and colocated files (`*.spec.ts`, `*.agents.md`) together
 - **Run tests after refactors:** ESLint and vitest on changed files (e.g. `*.spec.ts`)
-- **Type tests:** `*.spec-d.ts` must verify that the library’s typings come through when calling the APIs. See [.agents/plugins/vitest](./.agents/plugins/vitest)
-
-## TypeScript: Writing good typings
-
-Keep typings minimal and compact. Keep types DRY. Prefer narrowed types for returned values; widened types are mostly unacceptable. Use mapped types so "go to definition" in the IDE works correctly. Never require consumers to statically cast their accessors or callback params; inference must flow from libraries/utils/helpers/composables/etc
-
-### Prefer `const` type parameters for narrowing
-
-Use **`const` on generic type parameters** (e.g. `const TEntries extends readonly StructureAccessorConfigEntry[]`) when the API needs to infer narrow literal types from the consumer's argument. That way the library infers the narrowest type and downstream types stay precise. Prefer this over requiring the consumer to add runtime `as const`; the `const` modifier on the generic is the right place to enforce narrowing so consumers can write normal literals without extra assertions
-
-### core-ts shared types
-
-Check [packages/core-ts/src/types](./packages/core-ts/src/types) first before creating new or duplicating existing simple or complex types, type utilities, etc. Use existing helpers when available, example: `ExtractStrict` (extract-strict.ts), `OmitStrict` (omit-strict.ts), `FunctionAny` (function-any.ts), `FunctionAnyPromise` (function-any-promise.ts)
-
-### TypeScript libraries
-
-- **lodash-es** — Type/object helpers: e.g. `isObject`, `isFunction`, `isUndefined`, `cloneDeep`, `pick`/`omit`
-- **luxon** — Date/time: e.g. `DateTime`, `Duration`, `Interval`, `Settings`
-- **type-fest** — Type utilities: e.g. `ReadonlyDeep`, `ArrayValues`, `SetRequired`, `Simplify`
-- **neverthrow** — Result types: e.g. `ok`, `err`, `okAsync`, `ResultAsync`
+- **Type tests:** `*.spec-d.ts` must verify that the library’s typings come through when calling the APIs
+- **Alphabetize lists:** New lists of data (e.g. properties, object keys) should be alphabetized. When editing existing lists, check if they are already alphabetized; if so, preserve alphabetization when adding or changing items; if not, treat the order as intentional and do not re-alphabetize
 
 ## Plugins for AI Agents
 
+- **Guidelines**: plugin content should be condensed, no trailing punctuation, sacrifice grammar for concision
 - **`.agents`** – Project root directory for agent-facing config, docs, and plugins; keep agent-agnostic where possible
 - **`.agents/plugins`** – Holds plugin bundles (e.g. Cursor, Claude) that group rules, skills, commands, MCP, etc.; one subdirectory per plugin
-- **Guidelines**: plugin content should be condensed, no trailing punctuation, sacrifice grammar for concision
+  - [configs](./.agents/plugins/configs) – Shared config pattern: [configs/](./configs) packages (TypeScript, ESLint, Prettier, Vite, Vitest); extend/import; how to add or extend
+  - [turborepo](./.agents/plugins/turborepo) – Turborepo orchestration, pnpm exclusive, root commands; dependencies; creating new workspaces (categories, configs, examples, packages pattern)
+  - [typescript](./.agents/plugins/typescript/README.md) – Typings: minimal/DRY/narrowed types, const type params, core-ts, type libs
+  - [vitest](./.agents/plugins/vitest) – Type tests (*.spec-d.ts); assert on API types; run pnpm test
+
