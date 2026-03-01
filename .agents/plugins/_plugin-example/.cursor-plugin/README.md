@@ -1,4 +1,4 @@
-# Cursor plugin (plugin-example)
+# Cursor plugin (\_plugin-example)
 
 ## Purpose
 

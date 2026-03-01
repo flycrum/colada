@@ -7,7 +7,7 @@ Skills are specialized capabilities the agent can invoke manually or autonomousl
 ### Good examples
 
 - create-turborepo-workspace: when user asks to add a workspace, use this skill + command
-- writing-type-tests: when writing \*.test-d.ts, use this skill
+- writing-type-tests: when writing \*.spec-d.ts, use this skill
 - Skill = specialized playbook; agent may auto-invoke when relevant
 
 ### Bad examples

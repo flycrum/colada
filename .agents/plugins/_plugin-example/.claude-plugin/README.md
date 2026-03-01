@@ -1,4 +1,4 @@
-# Claude plugin (plugin-example)
+# Claude plugin (\_plugin-example)
 
 ## Purpose
 
@@ -7,5 +7,5 @@
 - **Skills:** In `skills/<name>/SKILL.md`; namespaced as `/plugin-name:skill-name`.
 - **Rules:** No dedicated "rules" file; project uses CLAUDE.md or `.claude/rules/*.md`; plugin context in **rules/** folder.
 - **Agents:** Custom agents in `agents/` (Claude: subagents).
-- **Test:** `claude --plugin-dir ./plugin-example`.
+- **Test:** `claude --plugin-dir ./_plugin-example`.
 - **Docs:** [Claude Code: Create plugins](https://code.claude.com/docs/en/plugins), [Plugins reference](https://code.claude.com/docs/en/plugins-reference).

@@ -12,4 +12,4 @@ Practical steps for generating or updating a plugin (including this plugin). Age
 4. Optional: commands/, skills/, agents/, hooks/ per [plugin-conventions.md](./plugin-conventions.md). Mirror [Cursor starter-advanced](https://github.com/cursor/plugin-template/tree/main/plugins/starter-advanced) + .claude-plugin
 5. Every README in plugin: ## Purpose; state 100% for humans; AI agents can stop reading and use rules/ etc.
 6. Keep content succinct; sacrifice grammar for concision;
-7. Self-reference this plugin (plugin-example) when creating or updating any plugin
+7. Self-reference this plugin (\_plugin-example) when creating or updating any plugin

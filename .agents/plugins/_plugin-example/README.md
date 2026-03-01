@@ -1,8 +1,8 @@
-# Plugin-example
+# \_plugin-example
 
 ## Purpose
 
-- This `plugin-example` is both the documentation and the example for building and maintaining AI agent plugins
+- This `_plugin-example` is both the documentation and the example for building and maintaining AI agent plugins
 - When generating or updating any plugin (including this one), agents should reference this plugin
 - Keep succinct, limit size, condense, sacrifice grammar for concision
 - Do not create AGENTS.md in plugins; all context goes in `rules/`

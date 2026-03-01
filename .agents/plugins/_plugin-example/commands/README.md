@@ -7,7 +7,7 @@ Commands are agent-executable step lists: repeatable workflows you intentionally
 ### Good examples
 
 - create-workspace: steps to add a new monorepo workspace
-- add-type-test: steps to create a \*.test-d.ts file and run tests
+- add-type-test: steps to create a \*.spec-d.ts file and run tests
 - Command = manually triggered; repeatable workflow
 
 ### Bad examples
