@@ -11,6 +11,7 @@ How to write good TypeScript typings in this repo. Apply when authoring or refac
 - Prefer **narrowed types** for returned values; widened types are mostly unacceptable
 - Use **mapped types** so "go to definition" in the IDE works correctly (e.g. property on returned object resolves to its definition)
 - **Never require consumers to statically cast** their accessors or callback params; inference must flow from libraries, utils, helpers, composables, etc
+- **Avoid `any`** unless necessary; when you need a generic "any function" or "any async function" shape, use [FunctionAny](../../../packages/core-ts/src/types/function-any.ts) / [FunctionAnyPromise](../../../packages/core-ts/src/types/function-any-promise.ts) from core-ts instead of spelling `(...args: any[]) => any` or similar
 
 ## Relation
 
