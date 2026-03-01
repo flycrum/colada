@@ -19,6 +19,10 @@ VoidZero stack. Turborepo 2.x, pnpm 10.x (exclusive), TypeScript 5.x strict, Vue
 
 - [.agents/plugins/turborepo](./.agents/plugins/turborepo) – Turborepo orchestration, pnpm exclusive, root commands; dependencies; creating new workspaces (categories, configs, examples, packages pattern).
 
+## Configs (DRY)
+
+- [.agents/plugins/configs](./.agents/plugins/configs) – Shared config pattern: [configs/](./configs) packages (TypeScript, ESLint, Prettier, Vite, Vitest); extend/import; how to add or extend. Use when adding or changing workspace or shared config.
+
 ## Code Style
 
 ESM only; TypeScript strict, no `any`; format via shared Prettier. See [configs](./configs).
