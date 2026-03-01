@@ -7,18 +7,17 @@
     "dev": "turbo run dev",
     "format": "prettier --write \"**/*.{ts,tsx,js,jsx,json,md}\"",
     "lint": "eslint .",
-    "pnpm:devPreinstall": "node scripts/sync-claude-marketplace.js",
     "sync:claude-marketplace": "node scripts/sync-claude-marketplace.js",
     "sync:test:claude-marketplace": "node scripts/sync-claude-marketplace-test-all-conditions.js",
     "test": "turbo run test",
-    "type-check": "turbo run type-check"
+    "type-check": "turbo run type-check",
+    "setup:githooks": "git config core.hooksPath .githooks"
   },
   "devDependencies": {
     "@colada/eslint-config": "workspace:*",
     "@colada/prettier-config": "workspace:*",
     "@colada/typescript-config": "workspace:*",
     "eslint": "^9.15.0",
-    "fast-json-patch": "^3.1.1",
     "globals": "^15.12.0",
     "prettier": "^3.4.2",
     "turbo": "^2.3.0",

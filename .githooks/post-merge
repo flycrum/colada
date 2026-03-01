@@ -1,0 +1,5 @@
+#!/bin/sh
+# Runs after successful git merge (e.g. after git pull).
+# Syncs Claude local marketplace/settings per ENABLE_LOCAL_AGENT_CLAUDE in .envrc.local / .env.
+# CWD is repo root when the hook runs.
+exec node scripts/sync-claude-marketplace.js
