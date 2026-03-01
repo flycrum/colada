@@ -20,4 +20,21 @@ export const config = [
       'prettier/prettier': 'error',
     },
   },
+  // spec-d.ts: allow leading _ for intentionally unused type aliases; allow {} for empty object type assertions
+  {
+    files: ['**/*.spec-d.ts'],
+    rules: {
+      '@typescript-eslint/no-empty-object-type': 'off',
+      '@typescript-eslint/no-unused-vars': [
+        'error',
+        {
+          argsIgnorePattern: '^_',
+          caughtErrorsIgnorePattern: '^_',
+          destructuredArrayIgnorePattern: '^_',
+          varsIgnorePattern: '^_',
+          ignoreRestSiblings: true,
+        },
+      ],
+    },
+  },
 ];
