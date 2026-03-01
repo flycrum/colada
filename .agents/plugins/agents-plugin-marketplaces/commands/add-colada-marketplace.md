@@ -4,18 +4,8 @@ description: Opt-in and automatic setup for the Colada local marketplace in Clau
 
 # Add Colada marketplace (automatic)
 
-## Purpose
-
-Get the Colada plugin marketplace (colada-plugins) and all its plugins available in Claude Code with **no manual slash commands**. The only manual steps are opting in via env and (once per clone) enabling git hooks; the rest is driven by the **post-merge** git hook and the sync script.
-
-## Steps (only opt-in + one-time setup are manual)
-
-1. **Opt-in:** Copy root [.env.example](../../../../.env.example) to **.envrc.local** (gitignored; you own it, never commit). Set `ENABLE_LOCAL_AGENT_CLAUDE=true` there. Optionally set `CLAUDE_EXCLUDED_PLUGINS=env-variables,turborepo` (comma-separated plugin dir names) to exclude specific plugins; only applied when enabled; safe to keep when toggling to false. With [direnv](https://direnv.net/), root [.envrc](../../../../.envrc) loads `.envrc.local` when you `cd` into the repo.
-
-2. **Enable git hooks (once per clone):** From repo root run **`pnpm run setup:githooks`**. This sets `git config core.hooksPath .githooks` so the repo’s [.githooks](../../../../.githooks) run. The **post-merge** hook then runs [scripts/sync-claude-marketplace.js](../scripts/sync-claude-marketplace.js) after every successful **git pull** (when pull does a merge), creating/updating `.claude-plugin/marketplace.json` and `.claude/settings.json` per your env. If you haven’t pulled yet after enabling hooks, run **`pnpm run marketplace-claude-sync`** once to sync now.
-
-3. **Use:** Open this project in Claude Code. The app reads the generated `.claude/settings.json`; the marketplace and plugins are already registered and enabled. You do **not** run `/plugin marketplace add .` or `/plugin install …@colada-plugins`. If your Claude Code version prompts once to install marketplaces/plugins for the project, accept the prompt.
-
-4. **New plugins:** Adding a new plugin under `.agents/plugins/<name>/` with a `.claude-plugin/plugin.json` is enough. The next **git pull** (or `pnpm run marketplace-claude-sync`) will include it in the marketplace and in `enabledPlugins`; no developer action required.
-
-5. **Disable:** Set `ENABLE_LOCAL_AGENT_CLAUDE=false` in `.envrc.local`, then run **`pnpm run marketplace-claude-sync`** (or pull and let the post-merge hook run); the script surgically removes our marketplace fields (clean slate). See [enable-flags-and-script.md](../rules/enable-flags-and-script.md).
+1. **Opt-in:** Copy root [.env.example](../../../.env.example) to **.envrc.local**. Set `ENABLE_LOCAL_AGENT_CLAUDE=true`. Optional: `CLAUDE_EXCLUDED_PLUGINS=env-variables,turborepo`. Root [.envrc](../../../.envrc) loads `.envrc.local` (direnv).
+2. **Githooks (once per clone):** From root run `pnpm run setup:githooks`. Post-merge then runs [sync-claude-marketplace.js](../scripts/sync-claude-marketplace.js) after git pull (merge). If you haven't pulled yet, run `pnpm run marketplace-claude-sync` once.
+3. **Use:** Open project in Claude Code; generated settings already register marketplace and plugins. No `/plugin marketplace add` or `/plugin install`.
+4. **New plugins:** Add `.agents/plugins/<name>/` with `.claude-plugin/plugin.json`; next pull or `pnpm run marketplace-claude-sync` picks it up.
+5. **Disable:** Set `ENABLE_LOCAL_AGENT_CLAUDE=false`, run `pnpm run marketplace-claude-sync` (or pull); script removes our fields. See [enable-flags-and-script.md](../rules/enable-flags-and-script.md).

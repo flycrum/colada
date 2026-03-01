@@ -1,14 +1,5 @@
 # Turborepo dependencies
 
-## Purpose
-
-Dependency management in the Colada monorepo: external vs workspace packages, root overrides. Agent reference. For general Turborepo/pnpm usage see [turborepo-general.md](./turborepo-general.md).
-
-## External vs workspace packages
-
-- **External (npm):** From registry (e.g. vue, vite). Add with `pnpm add <pkg>` in target workspace or `--filter <workspace>`. Shared tooling in root devDeps; app/package-specific in workspace package.json
-- **Workspace:** Under `configs/*`, `examples/*`, `packages/*`. Use `workspace:*` when one workspace depends on another. Name with `@colada/` scope (e.g. `@colada/colada-store`); directory path separate (e.g. `packages/colada-store/`). Turbo runs `^build` so dependents build after their deps
-
-## Root overrides
-
-- **pnpm.overrides** in root [package.json](../../../package.json) pin versions for the whole monorepo. Use for: core framework (Vue, etc.), build/tooling (Vite, TypeScript), test/formatter. Don't use for package-only deps or when versions can differ by workspace
+- **External:** From registry; `pnpm add <pkg>` in workspace or `--filter`. Shared tooling in root devDeps; app/package-specific in workspace
+- **Workspace:** Under configs/examples/packages. Use `workspace:*` for inter-workspace deps. Name `@colada/<pkg>`; dir path separate. Turbo `^build` runs deps first
+- **Root overrides:** [package.json](../../../package.json) `pnpm.overrides` pin versions monorepo-wide. Use for core framework, build/tooling; not for package-only or version-flexible deps

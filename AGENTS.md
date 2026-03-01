@@ -65,7 +65,7 @@ From root: `pnpm dev`, `pnpm build`, `pnpm lint`, `pnpm format`, `pnpm type-chec
 
 - **Guidelines**: plugin content condensed, no trailing punctuation, sacrifice grammar for concision
 - **`.agents`** – Project root directory for agent-facing config, docs, and plugins; keep agent-agnostic where possible
-- **`.agents/plugins`** – Plugin bundles (Cursor, Claude): one subdirectory per plugin. Each plugin root: **README.md** (## Purpose only) and **AGENTS.md** (## Purpose + optional ## Requirements); no AGENTS.md in sub-folders unless a plugin needs specific requirements (rare)
+- **`.agents/plugins`** – Plugin bundles (Cursor, Claude): one subdirectory per plugin. Each plugin root: **README.md** (## Purpose only) and **AGENTS.md** (## Purpose + optional ## Requirements); no AGENTS.md in sub-folders unless a plugin needs specific requirements (rare). Subfolder content (rules/, commands/, skills/): DRY and lean—reference not copy, one concern per file, no redundant Relation sections; see [writing-rules-commands-skills](.agents/plugins/_plugin-example/rules/writing-rules-commands-skills.md)
   - [agents-plugin-marketplaces](./.agents/plugins/agents-plugin-marketplaces) – Self-host Claude/Cursor plugins without publishing; env-gated sync, clean slate; opt-in via ENABLE_LOCAL_AGENT_CLAUDE only
   - [configs](./.agents/plugins/configs) – Shared config: [configs/](./configs); extend/import; how to add or extend
   - [env-variables](./.agents/plugins/env-variables) – ENABLE_LOCAL_AGENT_*; .env, .envrc; script contract
