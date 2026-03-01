@@ -8,8 +8,7 @@ dist/
 # Test / coverage
 coverage/
 
-# Local env (each developer owns these; never commit)
-.env
+# Local env overrides (each developer owns these; never commit)
 .env*.local
 .envrc.local
 *.local
