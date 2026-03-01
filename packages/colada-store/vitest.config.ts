@@ -1,17 +1,10 @@
+import { defineVitestConfig } from '@colada/vitest-config';
 import { resolve } from 'node:path';
-import { defineConfig } from 'vitest/config';
 
-export default defineConfig({
+export default defineVitestConfig({
   resolve: {
     alias: {
       '@': resolve(__dirname, 'src'),
     },
-  },
-  test: {
-    globals: true,
-    environment: 'node',
-  },
-  typecheck: {
-    include: ['src/**/*.test-d.ts'],
   },
 });

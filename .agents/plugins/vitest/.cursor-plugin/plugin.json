@@ -1,7 +1,7 @@
 {
   "name": "vitest",
   "version": "0.1.0",
-  "description": "Vitest type-testing guidance: assert only on API types, *.test-d.ts, run",
+  "description": "Vitest type-testing guidance: assert only on API types, *.spec-d.ts, run",
   "author": { "name": "Colada" },
   "keywords": ["vitest", "testing", "types"]
 }

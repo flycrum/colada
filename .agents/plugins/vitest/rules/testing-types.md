@@ -11,7 +11,7 @@ Type tests ensure the library's typings are correct at the call site. See repo r
 
 ## Where
 
-- **Files:** Vitest type tests live in `*.test-d.ts` (e.g. [packages/colada-store/src/define-colada-state.test-d.ts](../../../packages/colada-store/src/define-colada-state.test-d.ts))
+- **Files:** Vitest type tests live in `*.spec-d.ts` (e.g. [packages/colada-store/src/define-colada/state/define-colada-state.spec-d.ts](../../../packages/colada-store/src/define-colada/state/define-colada-state.spec-d.ts))
 - **Run:** `pnpm test` from root or from the package; typecheck included via `--typecheck`
 
 ## Relation

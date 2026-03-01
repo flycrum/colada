@@ -13,7 +13,7 @@ A single, condensed `AGENTS.md` for this monorepo's tech stack, packages, and ho
 
 ## Project Tech Stack
 
-VoidZero stack. Turborepo 2.x, pnpm 10.x (exclusive), TypeScript 5.x strict, Vue 3.x, Vite 6.x, Vitest 2.x, ESLint 9.x flat config, Prettier 3.x. Config sources: [configs/eslint-config](./configs/eslint-config), [configs/prettier-config](./configs/prettier-config), [configs/typescript-config](./configs/typescript-config). Root: [package.json](./package.json), [turbo.json](./turbo.json).
+VoidZero stack. Turborepo 2.x, pnpm 10.x (exclusive), TypeScript 5.x strict, Vue 3.x, Vite 6.x, Vitest 2.x, ESLint 9.x flat config, Prettier 3.x. Config sources: [configs/](./configs) (eslint, prettier, typescript, vite, vitest). Root: [package.json](./package.json), [turbo.json](./turbo.json).
 
 ## Turborepo and dependencies
 
@@ -59,7 +59,7 @@ From root: `pnpm dev`, `pnpm build`, `pnpm lint`, `pnpm format`, `pnpm type-chec
 - **Check imports:** When adding/editing import paths, verify they're correct.
 - **Keep filenames up to date:** When renaming function/variable/type, check if filename matches (e.g. `getHelp` → `get-help.ts`); refactor filename and colocated files (`*.spec.ts`, `*.agents.md`) together.
 - **Run tests after refactors:** ESLint and vitest on changed files (e.g. `*.spec.ts`).
-- **Type tests:** `*.test-d.ts` must verify that the library’s typings come through when calling the APIs. See [.agents/plugins/vitest](./.agents/plugins/vitest).
+- **Type tests:** `*.spec-d.ts` must verify that the library’s typings come through when calling the APIs. See [.agents/plugins/vitest](./.agents/plugins/vitest).
 
 ## Plugins for AI Agents
 

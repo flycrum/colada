@@ -60,6 +60,18 @@ importers:
         specifier: ^22.10.0
         version: 22.19.11
 
+  configs/vite-config:
+    dependencies:
+      vite:
+        specifier: ^6.0.0 || ^7.0.0
+        version: 7.3.1(@types/node@22.19.11)
+
+  configs/vitest-config:
+    dependencies:
+      vitest:
+        specifier: ^3.0.0
+        version: 3.2.4(@types/node@22.19.11)
+
   examples/colada-store-examples:
     dependencies:
       '@colada/colada-store':
@@ -78,6 +90,12 @@ importers:
       '@colada/typescript-config':
         specifier: workspace:*
         version: link:../../configs/typescript-config
+      '@colada/vite-config':
+        specifier: workspace:^
+        version: link:../../configs/vite-config
+      '@colada/vitest-config':
+        specifier: workspace:^
+        version: link:../../configs/vitest-config
       '@types/node':
         specifier: ^22.10.0
         version: 22.19.11
@@ -108,6 +126,12 @@ importers:
       '@colada/typescript-config':
         specifier: workspace:*
         version: link:../../configs/typescript-config
+      '@colada/vite-config':
+        specifier: workspace:^
+        version: link:../../configs/vite-config
+      '@colada/vitest-config':
+        specifier: workspace:^
+        version: link:../../configs/vitest-config
       '@types/node':
         specifier: ^22.10.0
         version: 22.19.11

@@ -1,13 +1,9 @@
 {
-  "extends": "./tsconfig.json",
+  "extends": "@colada/typescript-config/declaration.json",
   "compilerOptions": {
-    "noEmit": false,
-    "emitDeclarationOnly": true,
     "outDir": "dist",
-    "rootDir": "src",
-    "declaration": true,
-    "declarationMap": true
+    "rootDir": "src"
   },
   "include": ["src"],
-  "exclude": ["node_modules", "dist", "**/*.spec.ts", "**/*.test-d.ts"]
+  "exclude": ["node_modules", "dist", "**/*.spec.ts", "**/*.spec-d.ts"]
 }

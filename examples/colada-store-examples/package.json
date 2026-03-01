@@ -20,12 +20,14 @@
     "@colada/eslint-config": "workspace:*",
     "@colada/prettier-config": "workspace:*",
     "@colada/typescript-config": "workspace:*",
+    "@colada/vite-config": "workspace:^",
+    "@colada/vitest-config": "workspace:^",
     "@types/node": "^22.10.0",
     "@vitejs/plugin-vue": "^5.2.1",
     "eslint": "^9.15.0",
     "typescript": "5.9.3",
     "vite": "^6.0.0",
-    "vue-tsc": "^2.1.0",
-    "vitest": "^3.2.0"
+    "vitest": "^3.2.0",
+    "vue-tsc": "^2.1.0"
   }
 }
