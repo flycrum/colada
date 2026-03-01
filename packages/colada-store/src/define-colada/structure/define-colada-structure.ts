@@ -44,6 +44,90 @@ type PriorContext<
     : Record<string, never>;
 
 /**
+ * Context at index I built from tuple of resolved types (enables left-to-right inference).
+ * PriorFromTuple<['state','getters','methods'], [TState, TGetters, TMethods], 1> = { state: TState }
+ */
+type PriorFromTuple<
+  Keys extends readonly string[],
+  TTuple extends readonly unknown[],
+  I extends number,
+> = I extends 0
+  ? Record<string, never>
+  : Keys extends readonly [infer K0 extends string, ...infer RestKeys extends string[]]
+    ? TTuple extends readonly [infer V0, ...infer RestTuple extends readonly unknown[]]
+      ? RestKeys extends readonly string[]
+        ? { [P in K0]: V0 } & PriorFromTuple<RestKeys, RestTuple, Dec[I] & number>
+        : Record<string, never>
+      : Record<string, never>
+    : Record<string, never>;
+
+/** I-th element of tuple (0-based). */
+type TupleAt<T extends readonly unknown[], I extends number> = I extends 0
+  ? T extends readonly [infer H, ...unknown[]]
+    ? H
+    : never
+  : T extends readonly [unknown, ...infer R extends readonly unknown[]]
+    ? TupleAt<R, Dec[I] & number>
+    : never;
+
+/** Value type for definition key at index I. */
+type DefinitionShapeFromTupleValue<
+  Keys extends readonly string[],
+  TTuple extends readonly unknown[],
+  I extends number,
+> = PriorFromTuple<Keys, TTuple, I> extends infer C
+  ? C extends Record<string, never>
+    ? TupleAt<TTuple, I>
+    : (ctx: C) => TupleAt<TTuple, I>
+  : never;
+
+/** Build shape as intersection of single-key objects so each key gets correct type (no union). */
+type DefinitionShapeFromTupleIntersection<
+  Keys extends readonly string[],
+  TTuple extends readonly unknown[],
+> = Keys extends readonly [
+  infer K0 extends string,
+  infer K1 extends string,
+  infer K2 extends string,
+  ...infer Rest extends string[],
+]
+  ? { [P in K0]: DefinitionShapeFromTupleValue<Keys, TTuple, 0> } & {
+      [P in K1]: DefinitionShapeFromTupleValue<Keys, TTuple, 1>;
+    } & {
+      [P in K2]: DefinitionShapeFromTupleValue<Keys, TTuple, 2>;
+    } & (Rest extends readonly [infer K3 extends string, ...infer R4 extends string[]]
+        ? { [P in K3]: DefinitionShapeFromTupleValue<Keys, TTuple, 3> } & (R4 extends readonly [
+                infer K4 extends string,
+              ]
+              ? { [P in K4]: DefinitionShapeFromTupleValue<Keys, TTuple, 4> }
+              : object)
+        : object)
+  : Keys extends readonly [infer K0 extends string, infer K1 extends string]
+    ? { [P in K0]: DefinitionShapeFromTupleValue<Keys, TTuple, 0> } & {
+        [P in K1]: DefinitionShapeFromTupleValue<Keys, TTuple, 1>;
+      }
+    : Keys extends readonly [infer K0 extends string]
+      ? { [P in K0]: DefinitionShapeFromTupleValue<Keys, TTuple, 0> }
+      : object;
+
+/**
+ * Definition shape built from a tuple of resolved types so that context for index I
+ * uses tuple[0..I-1]. Intersection form ensures each key gets the correct type.
+ */
+export type DefinitionShapeFromTuple<
+  Keys extends readonly string[],
+  TTuple extends readonly unknown[],
+> = DefinitionShapeFromTupleIntersection<Keys, TTuple> & Record<string, unknown>;
+
+/**
+ * Definition record from tuple (for instance typing). Resolved<DefinitionFromTuple[K]> = TTuple[I].
+ */
+type DefinitionFromTuple<
+  Keys extends readonly string[],
+  TTuple extends readonly unknown[],
+> = DefinitionShapeFromTupleIntersection<Keys, TTuple> & Record<string, unknown>;
+
+/**
  * Definition shape: each key is either a value or (ctx: PriorContext) => value.
  * Constrains the definition factory return type so callback params infer from prior accessors.
  */
@@ -63,18 +147,39 @@ export type DefinitionShape<
 /** Instance shape: public accessors + dynamic internals (_accessorName, _structureAccessorsConfig). */
 export type StructureInstance = Record<string, unknown>;
 
-/** Instance with narrowed accessor keys and internals from config. */
-export type StructureInstanceWithKeys<TOrderedKeys extends readonly string[]> = Record<
-  string,
-  unknown
-> & { [K in TOrderedKeys[number]]: unknown } & { [K in `_${TOrderedKeys[number]}`]: unknown } & {
+/** Instance with narrowed accessor keys (resolved from TDefinition) and internals. */
+export type StructureInstanceWithKeys<
+  TOrderedKeys extends readonly string[],
+  TDefinition extends Record<string, unknown> = Record<string, unknown>,
+> = { [K in TOrderedKeys[number]]: Resolved<TDefinition[K]> } & {
+  [K in TOrderedKeys[number] as `_${K}`]: Resolved<TDefinition[K]>;
+} & {
   _structureAccessorsConfig: StructureAccessorsConfigShape<TOrderedKeys>;
 };
 
-/** Return type of the create function; useComposable accepts optional initProps. */
-export interface CreateStructureResult<TOrderedKeys extends readonly string[]> {
-  useComposable: (initProps?: unknown) => StructureInstanceWithKeys<TOrderedKeys>;
+/** Return type of the create function; useComposable returns instance typed from TDefinition. */
+export interface CreateStructureResult<
+  TOrderedKeys extends readonly string[],
+  TDefinition extends Record<string, unknown> = Record<string, unknown>,
+> {
+  useComposable: (initProps?: unknown) => StructureInstanceWithKeys<TOrderedKeys, TDefinition>;
 }
+
+/** Extracts TDefinition from a CreateStructureResult (e.g. from result of create(factory)). */
+export type DefinitionFromResult<R> =
+  R extends CreateStructureResult<readonly string[], infer D> ? D : never;
+
+/** Create function: tuple overload first (inference when TTuple provided), then legacy DefinitionShape. */
+export type CreateStructureFn<Keys extends readonly string[]> = {
+  <TTuple extends readonly [unknown, ...unknown[]]>(
+    factory: () => DefinitionShapeFromTuple<Keys, TTuple>
+  ): CreateStructureResult<Keys, DefinitionFromTuple<Keys, TTuple>>;
+  <TDefinition extends DefinitionShape<Keys, TDefinition> &
+    Record<Keys[number], unknown> &
+    Record<string, unknown>>(
+    factory: () => DefinitionShape<Keys, TDefinition>
+  ): CreateStructureResult<Keys, TDefinition>;
+};
 
 /**
  * Creates the structure layer. structureConfigFactoryFn receives context with StructureAccessorPresets;
@@ -98,18 +203,15 @@ export function defineColadaStructure<
   const TEntries extends readonly StructureAccessorConfigEntry[],
 >(
   structureConfigFactoryFn: (context: StructureConfigFactoryContext) => TEntries
-): <
-  TDefinition extends Record<OrderedKeysFromEntries<TEntries>[number], unknown> &
-    Record<string, unknown>,
->(
-  definitionFactory: () => DefinitionShape<OrderedKeysFromEntries<TEntries>, TDefinition>
-) => CreateStructureResult<OrderedKeysFromEntries<TEntries>> {
+): CreateStructureFn<OrderedKeysFromEntries<TEntries>> {
   const entries = structureConfigFactoryFn({ StructureAccessorPresets });
   const structureAccessorsConfig = defineColadaStructureAccessorsConfigMap(...entries);
   type TOrderedKeys = OrderedKeysFromEntries<TEntries>;
-  return function createStructure<
-    TDefinition extends Record<TOrderedKeys[number], unknown> & Record<string, unknown>,
-  >(definitionFactory: () => DefinitionShape<TOrderedKeys, TDefinition>) {
+  const createStructure = function (
+    definitionFactory: () =>
+      | DefinitionShapeFromTuple<TOrderedKeys, unknown[]>
+      | DefinitionShape<TOrderedKeys, Record<string, unknown>>
+  ) {
     const definition = definitionFactory();
     const keys = structureAccessorsConfig.orderedKeys as readonly string[];
     const resolved: Record<string, unknown> = {};
@@ -149,8 +251,9 @@ export function defineColadaStructure<
         if (initProps !== undefined) {
           // Reserved: constructor/init props applied here in full implementation.
         }
-        return instance as StructureInstanceWithKeys<TOrderedKeys>;
+        return instance as StructureInstanceWithKeys<TOrderedKeys, Record<string, unknown>>;
       },
     };
   };
+  return createStructure as CreateStructureFn<TOrderedKeys>;
 }

@@ -9,9 +9,14 @@ onMounted(() => {
     { getters: { type: 'object', vue: 'computed' } },
     { methods: { type: 'function' } },
   ]);
-  const instance = defineSimpleStructure(() => ({
+  type State = { count: number };
+  type Getters = { double: () => number };
+  type Methods = { increment: () => void };
+  const instance = defineSimpleStructure<[State, Getters, Methods]>(() => ({
     state: { count: 0 },
-    getters: ({ state }: { state: { count: number } }) => ({ double: () => state.count * 2 }),
+    getters: ({ state }) => ({
+      double: () => state.count * 2,
+    }),
     methods: ({ state, getters }) => ({
       increment: () => {
         console.log('increment before: count:', state.count, 'double:', getters.double);
@@ -21,7 +26,10 @@ onMounted(() => {
     }),
   }));
 
-  const { count, double, increment } = instance.useComposable();
+  const { state, getters, methods } = instance.useComposable();
+  const { count } = state;
+  const double = getters.double;
+  const increment = methods.increment;
 });
 </script>
 

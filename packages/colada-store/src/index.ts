@@ -4,6 +4,7 @@ export { defineColadaStore } from './define-colada/store/define-colada-store';
 export {
   defineColadaStructure,
   type CreateStructureResult,
+  type DefinitionFromResult,
   type DefinitionShape,
   type OrderedKeysFromConfig,
   type StructureConfigFactoryContext,
