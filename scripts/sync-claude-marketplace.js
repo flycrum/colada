@@ -4,7 +4,7 @@
  * .claude-plugin/marketplace.json and .claude/settings.json.
  * When false: surgically remove only our fields (clean slate).
  * Invoked by .githooks/post-merge (after git pull) and via pnpm run sync:claude-marketplace.
- * Uses only Node built-ins (no deps). On any error exits 0 so the caller never fails.
+ * Uses fast-json-patch (RFC 6902) for surgical edits. On any error exits 0 so the caller never fails.
  */
 
 import fs from 'fs';
@@ -120,12 +120,20 @@ function buildCanonicalSettings(pluginIds) {
   };
 }
 
+function applyOps(doc, ops, { applyPatch, validate }) {
+  if (ops.length === 0) return doc;
+  const err = validate(ops);
+  if (err) throw err;
+  const result = applyPatch(doc, ops, true, true);
+  return result.newDocument !== undefined ? result.newDocument : doc;
+}
+
 function ensureDir(filePath) {
   const dir = path.dirname(filePath);
   if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
 }
 
-function enable() {
+function enable(patch) {
   const plugins = discoverPlugins();
   const pluginIds = plugins.map((p) => p.name);
 
@@ -136,10 +144,17 @@ function enable() {
   } else {
     const marketplace = JSON.parse(fs.readFileSync(MARKETPLACE_FILE, 'utf8'));
     const canonical = buildCanonicalMarketplace();
-    marketplace[MARKETPLACE_KEY_NAME] = canonical[MARKETPLACE_KEY_NAME];
-    marketplace[MARKETPLACE_KEY_OWNER] = canonical[MARKETPLACE_KEY_OWNER];
-    marketplace[MARKETPLACE_KEY_PLUGINS] = canonical[MARKETPLACE_KEY_PLUGINS];
-    fs.writeFileSync(MARKETPLACE_FILE, JSON.stringify(marketplace, null, 2));
+    const ops = [
+      { op: 'replace', path: `/${MARKETPLACE_KEY_NAME}`, value: canonical[MARKETPLACE_KEY_NAME] },
+      { op: 'replace', path: `/${MARKETPLACE_KEY_OWNER}`, value: canonical[MARKETPLACE_KEY_OWNER] },
+      {
+        op: 'replace',
+        path: `/${MARKETPLACE_KEY_PLUGINS}`,
+        value: canonical[MARKETPLACE_KEY_PLUGINS],
+      },
+    ];
+    const patched = applyOps(marketplace, ops, patch);
+    fs.writeFileSync(MARKETPLACE_FILE, JSON.stringify(patched, null, 2));
   }
 
   if (!fs.existsSync(SETTINGS_FILE)) {
@@ -154,16 +169,26 @@ function enable() {
       delete enabledPlugins[`${name}@${MARKETPLACE_NAME}`];
     }
     Object.assign(enabledPlugins, canonicalSettings[SETTINGS_KEY_ENABLED_PLUGINS]);
-    settings[SETTINGS_KEY_EXTRA_KNOWN_MARKETPLACES] = {
-      ...settings[SETTINGS_KEY_EXTRA_KNOWN_MARKETPLACES],
-      ...canonicalSettings[SETTINGS_KEY_EXTRA_KNOWN_MARKETPLACES],
-    };
-    settings[SETTINGS_KEY_ENABLED_PLUGINS] = enabledPlugins;
-    fs.writeFileSync(SETTINGS_FILE, JSON.stringify(settings, null, 2));
+    const ops = [];
+    ops.push({
+      op: settings[SETTINGS_KEY_EXTRA_KNOWN_MARKETPLACES] ? 'replace' : 'add',
+      path: `/${SETTINGS_KEY_EXTRA_KNOWN_MARKETPLACES}`,
+      value: {
+        ...settings[SETTINGS_KEY_EXTRA_KNOWN_MARKETPLACES],
+        ...canonicalSettings[SETTINGS_KEY_EXTRA_KNOWN_MARKETPLACES],
+      },
+    });
+    ops.push({
+      op: settings[SETTINGS_KEY_ENABLED_PLUGINS] ? 'replace' : 'add',
+      path: `/${SETTINGS_KEY_ENABLED_PLUGINS}`,
+      value: enabledPlugins,
+    });
+    const patched = applyOps(settings, ops, patch);
+    fs.writeFileSync(SETTINGS_FILE, JSON.stringify(patched, null, 2));
   }
 }
 
-function disable() {
+function disable(patch) {
   if (fs.existsSync(MARKETPLACE_FILE)) {
     const marketplace = JSON.parse(fs.readFileSync(MARKETPLACE_FILE, 'utf8'));
     const isOurs =
@@ -173,22 +198,33 @@ function disable() {
     if (isOurs) {
       fs.unlinkSync(MARKETPLACE_FILE);
     } else {
-      delete marketplace[MARKETPLACE_KEY_NAME];
-      delete marketplace[MARKETPLACE_KEY_OWNER];
-      delete marketplace[MARKETPLACE_KEY_PLUGINS];
-      fs.writeFileSync(MARKETPLACE_FILE, JSON.stringify(marketplace, null, 2));
+      const ops = [];
+      if (marketplace[MARKETPLACE_KEY_NAME] !== undefined)
+        ops.push({ op: 'remove', path: `/${MARKETPLACE_KEY_NAME}` });
+      if (marketplace[MARKETPLACE_KEY_OWNER] !== undefined)
+        ops.push({ op: 'remove', path: `/${MARKETPLACE_KEY_OWNER}` });
+      if (marketplace[MARKETPLACE_KEY_PLUGINS] !== undefined)
+        ops.push({ op: 'remove', path: `/${MARKETPLACE_KEY_PLUGINS}` });
+      if (ops.length) {
+        applyOps(marketplace, ops, patch);
+        fs.writeFileSync(MARKETPLACE_FILE, JSON.stringify(marketplace, null, 2));
+      }
     }
   }
 
   if (fs.existsSync(SETTINGS_FILE)) {
     const settings = JSON.parse(fs.readFileSync(SETTINGS_FILE, 'utf8'));
+    const removeOps = [];
     if (
       settings[SETTINGS_KEY_EXTRA_KNOWN_MARKETPLACES] &&
       settings[SETTINGS_KEY_EXTRA_KNOWN_MARKETPLACES][MARKETPLACE_NAME] !== undefined
     ) {
       delete settings[SETTINGS_KEY_EXTRA_KNOWN_MARKETPLACES][MARKETPLACE_NAME];
       if (Object.keys(settings[SETTINGS_KEY_EXTRA_KNOWN_MARKETPLACES]).length === 0) {
-        delete settings[SETTINGS_KEY_EXTRA_KNOWN_MARKETPLACES];
+        removeOps.push({
+          op: 'remove',
+          path: `/${SETTINGS_KEY_EXTRA_KNOWN_MARKETPLACES}`,
+        });
       }
     }
     if (settings[SETTINGS_KEY_ENABLED_PLUGINS]) {
@@ -197,7 +233,14 @@ function disable() {
           delete settings[SETTINGS_KEY_ENABLED_PLUGINS][key];
       }
       if (Object.keys(settings[SETTINGS_KEY_ENABLED_PLUGINS]).length === 0) {
-        delete settings[SETTINGS_KEY_ENABLED_PLUGINS];
+        removeOps.push({ op: 'remove', path: `/${SETTINGS_KEY_ENABLED_PLUGINS}` });
+      }
+    }
+    for (const op of removeOps) {
+      try {
+        applyOps(settings, [op], patch);
+      } catch {
+        void 0;
       }
     }
     const keys = Object.keys(settings).filter((k) => settings[k] !== undefined);
@@ -217,16 +260,19 @@ function parseEnableArg() {
   return value === 'true';
 }
 
-function main() {
+async function main() {
   try {
+    const pkg = await import('fast-json-patch');
+    const api = pkg.default || pkg;
+    const patch = { applyPatch: api.applyPatch, validate: api.validate };
     loadLocalEnv();
     const forceEnable = parseEnableArg();
     const enabled =
       forceEnable !== null
         ? forceEnable
         : readEnv('ENABLE_LOCAL_AGENT_CLAUDE', 'false').toLowerCase() === 'true';
-    if (enabled) enable();
-    else disable();
+    if (enabled) enable(patch);
+    else disable(patch);
   } catch {
     process.exit(0);
   }
