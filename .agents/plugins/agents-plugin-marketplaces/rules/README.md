@@ -2,7 +2,7 @@
 
 ## Purpose
 
-Rules in this plugin describe how Colada self-hosts agent plugins (Claude, Cursor) without publishing: local marketplace, env-gated sync script, and clean-slate toggle. **Requirement:** no manual steps except opt-in—see [automatic-only-opt-in.md](./automatic-only-opt-in.md). Local env: copy root [.env.example](../../../.env.example) to **.envrc.local** (gitignored); each developer owns .envrc.local; root [.envrc](../../../.envrc) loads it via `source_env_if_exists`.
+Rules in this plugin describe how Colada self-hosts agent plugins (Claude, Cursor) without publishing: local marketplace, env-gated sync script, and clean-slate toggle. **Requirement:** no manual steps except opt-in—see [automatic-only-opt-in.md](./automatic-only-opt-in.md). **After changing plugins:** when you add, create, or modify a plugin under `.agents/plugins` or its contents, run the sync script so the marketplace stays in sync—see [sync-after-plugin-changes.md](./sync-after-plugin-changes.md). Local env: copy root [.env.example](../../../.env.example) to **.envrc.local** (gitignored); each developer owns .envrc.local; root [.envrc](../../../.envrc) loads it via `source_env_if_exists`.
 
 ## Claude code intricacies
 
