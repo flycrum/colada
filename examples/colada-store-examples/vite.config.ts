@@ -1,3 +1,4 @@
+import { viteBuildBase } from '@colada/vite-config';
 import vue from '@vitejs/plugin-vue';
 import path from 'node:path';
 import { defineConfig } from 'vite';
@@ -12,8 +13,5 @@ export default defineConfig({
       ),
     },
   },
-  build: {
-    target: 'es2022',
-    outDir: 'dist',
-  },
+  build: viteBuildBase,
 });

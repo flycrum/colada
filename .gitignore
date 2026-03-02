@@ -8,10 +8,14 @@ dist/
 # Test / coverage
 coverage/
 
-# Local env
-.env
+# Local env overrides (each developer owns these; never commit)
 .env*.local
+.envrc.local
 *.local
+
+# Script-generated / local Claude Code state (marketplace-claude-sync.js; do not commit)
+.claude-plugin/
+.claude/
 
 # IDE / OS
 .idea/

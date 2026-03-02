@@ -1,0 +1,35 @@
+{
+  "commands": [
+    ".cursor/commands/add-colada-marketplace.md",
+    ".cursor/commands/manual-test-pnpm-install-sync.md",
+    ".cursor/commands/git-commit-staged-files.md",
+    ".cursor/commands/create-workspace.md"
+  ],
+  "rules": [
+    ".cursor/rules/agents-plugin-marketplaces/README.md",
+    ".cursor/rules/agents-plugin-marketplaces/automatic-only-opt-in.md",
+    ".cursor/rules/agents-plugin-marketplaces/claude-code-intricacies.md",
+    ".cursor/rules/agents-plugin-marketplaces/cursor-context-warning.md",
+    ".cursor/rules/agents-plugin-marketplaces/cursor-intricacies.md",
+    ".cursor/rules/agents-plugin-marketplaces/enable-flags-and-script.md",
+    ".cursor/rules/agents-plugin-marketplaces/other-agent-intricacies.md",
+    ".cursor/rules/agents-plugin-marketplaces/self-host-without-publishing.md",
+    ".cursor/rules/agents-plugin-marketplaces/sync-after-plugin-changes.md",
+    ".cursor/rules/configs/README.md",
+    ".cursor/rules/configs/configs-add-or-extend.md",
+    ".cursor/rules/configs/configs-current.md",
+    ".cursor/rules/configs/configs-purpose-and-context.md",
+    ".cursor/rules/env-variables/conventions.md",
+    ".cursor/rules/env-variables/variables.md",
+    ".cursor/rules/env-variables/where-to-define.md",
+    ".cursor/rules/turborepo/turborepo-dependencies.md",
+    ".cursor/rules/turborepo/turborepo-general.md",
+    ".cursor/rules/turborepo/turborepo-new-workspace.md",
+    ".cursor/rules/typescript/README.md",
+    ".cursor/rules/typescript/const-type-parameters.md",
+    ".cursor/rules/typescript/core-ts-shared-types.md",
+    ".cursor/rules/typescript/typescript-libraries.md",
+    ".cursor/rules/typescript/typings-principles.md",
+    ".cursor/rules/vitest/testing-types.md"
+  ]
+}

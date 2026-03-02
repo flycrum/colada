@@ -1,15 +1,11 @@
+import { viteBuildBase } from '@colada/vite-config';
 import { resolve } from 'node:path';
 import { defineConfig } from 'vite';
-import dts from 'vite-plugin-dts';
 
 export default defineConfig({
-  plugins: [
-    dts({
-      insertTypesEntry: false,
-      outDir: 'dist',
-    }),
-  ],
+  plugins: [],
   build: {
+    ...viteBuildBase,
     lib: {
       entry: resolve(__dirname, 'src/index.ts'),
       name: 'colada-store',
@@ -24,7 +20,6 @@ export default defineConfig({
         },
       },
     },
-    target: 'es2022',
     minify: false,
     sourcemap: true,
   },

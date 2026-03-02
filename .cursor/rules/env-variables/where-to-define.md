@@ -1,0 +1,1 @@
+../../../.agents/plugins/env-variables/rules/where-to-define.md

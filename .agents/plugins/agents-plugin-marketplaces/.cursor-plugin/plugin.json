@@ -1,0 +1,7 @@
+{
+  "name": "agents-plugin-marketplaces",
+  "version": "0.1.0",
+  "description": "Self-host Colada agent plugins (Claude/Cursor): local marketplace, env-gated sync script, clean slate toggle; documents intricacies and one-time setup",
+  "author": { "name": "Colada" },
+  "keywords": ["marketplace", "claude", "cursor", "plugins", "self-host", "env"]
+}

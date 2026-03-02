@@ -1,0 +1,7 @@
+{
+  "name": "env-variables",
+  "version": "0.1.0",
+  "description": "Env vars for Colada: ENABLE_LOCAL_AGENT_CLAUDE, ENABLE_LOCAL_AGENT_CURSOR; where to define (.env, .envrc); script contract",
+  "author": { "name": "Colada" },
+  "keywords": ["env", "environment", "variables", "agent", "marketplace"]
+}

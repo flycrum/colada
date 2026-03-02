@@ -1,0 +1,6 @@
+{
+  "name": "turborepo",
+  "version": "0.1.0",
+  "description": "Turborepo 2.x and pnpm usage for the Colada monorepo: orchestration, dependencies, new workspace",
+  "author": { "name": "Colada" }
+}

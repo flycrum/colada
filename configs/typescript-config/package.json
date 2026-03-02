@@ -9,12 +9,14 @@
   "exports": {
     "./base.json": "./base.json",
     "./library.json": "./library.json",
-    "./node.json": "./node.json"
+    "./node.json": "./node.json",
+    "./declaration.json": "./declaration.json"
   },
   "files": [
     "base.json",
     "library.json",
-    "node.json"
+    "node.json",
+    "declaration.json"
   ],
   "devDependencies": {
     "@types/node": "^22.10.0"

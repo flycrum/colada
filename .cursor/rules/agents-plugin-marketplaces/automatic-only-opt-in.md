@@ -1,0 +1,1 @@
+../../../.agents/plugins/agents-plugin-marketplaces/rules/automatic-only-opt-in.md

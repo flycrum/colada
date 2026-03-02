@@ -1,0 +1,1 @@
+../../.agents/plugins/agents-plugin-marketplaces/commands/manual-test-pnpm-install-sync.md

@@ -1,0 +1,7 @@
+{
+  "name": "git",
+  "version": "0.1.0",
+  "description": "Git workflow commands: commit staged files, message, push",
+  "author": { "name": "Colada" },
+  "keywords": ["git", "commit", "cursor"]
+}

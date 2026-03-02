@@ -5,19 +5,28 @@
   "scripts": {
     "build": "turbo run build",
     "dev": "turbo run dev",
-    "lint": "eslint .",
     "format": "prettier --write \"**/*.{ts,tsx,js,jsx,json,md}\"",
-    "type-check": "turbo run type-check",
-    "test": "turbo run test"
+    "lint": "eslint .",
+    "marketplace-all:sync": "pnpm run marketplace-claude:sync && pnpm run marketplace-cursor:sync",
+    "marketplace-all:sync:test": "pnpm run marketplace-claude:sync-test && pnpm run marketplace-cursor:sync-test",
+    "marketplace-claude:sync": "node .agents/plugins/agents-plugin-marketplaces/scripts/marketplace-claude-sync.js",
+    "marketplace-claude:sync-test": "node .agents/plugins/agents-plugin-marketplaces/scripts/marketplace-claude-sync-test-all-conditions.js",
+    "marketplace-cursor:sync": "node .agents/plugins/agents-plugin-marketplaces/scripts/marketplace-cursor-sync.js",
+    "marketplace-cursor:sync-test": "node .agents/plugins/agents-plugin-marketplaces/scripts/marketplace-cursor-sync-test-all-conditions.js",
+    "setup:githooks": "git config core.hooksPath .githooks",
+    "test": "turbo run test",
+    "type-check": "turbo run type-check"
   },
   "devDependencies": {
     "@colada/eslint-config": "workspace:*",
     "@colada/prettier-config": "workspace:*",
     "@colada/typescript-config": "workspace:*",
     "eslint": "^9.15.0",
+    "fast-json-patch": "^3.1.1",
+    "globals": "^15.12.0",
     "prettier": "^3.4.2",
     "turbo": "^2.3.0",
-    "typescript": "^5.7.2"
+    "typescript": "5.9.3"
   },
   "packageManager": "pnpm@10.0.0",
   "engines": {

@@ -1,0 +1,49 @@
+{
+  "name": "@colada/core-ts",
+  "version": "0.0.1",
+  "description": "Common TypeScript utils, helpers, and types",
+  "type": "module",
+  "license": "MIT",
+  "author": "",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/flycrum/colada.git",
+    "directory": "packages/core-ts"
+  },
+  "bugs": "https://github.com/flycrum/colada/issues",
+  "homepage": "https://github.com/flycrum/colada/tree/main/packages/core-ts#readme",
+  "files": [
+    "dist"
+  ],
+  "main": "./dist/core-ts.js",
+  "module": "./dist/core-ts.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/core-ts.js",
+      "default": "./dist/core-ts.js"
+    }
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "devDependencies": {
+    "@colada/eslint-config": "workspace:*",
+    "@colada/typescript-config": "workspace:*",
+    "@colada/vite-config": "workspace:^",
+    "@colada/vitest-config": "workspace:^",
+    "@types/node": "^22.10.0",
+    "typescript": "5.9.3",
+    "vite": "^7.0.0",
+    "vite-plugin-dts": "^4.5.0",
+    "vitest": "^3.2.0"
+  },
+  "scripts": {
+    "build": "vite build && tsc -p tsconfig.declaration.json",
+    "dev": "vite build --watch",
+    "type-check": "tsc --noEmit && tsc -p tsconfig.node.json --noEmit",
+    "lint": "eslint .",
+    "test": "vitest run --typecheck"
+  }
+}

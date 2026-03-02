@@ -1,0 +1,1 @@
+../../../.agents/plugins/turborepo/rules/turborepo-general.md

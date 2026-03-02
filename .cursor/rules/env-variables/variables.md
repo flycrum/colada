@@ -1,0 +1,1 @@
+../../../.agents/plugins/env-variables/rules/variables.md

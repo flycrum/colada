@@ -1,0 +1,1 @@
+../../.agents/plugins/git/commands/git-commit-staged-files.md

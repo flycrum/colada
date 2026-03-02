@@ -1,0 +1,1 @@
+../../../.agents/plugins/vitest/rules/testing-types.md
