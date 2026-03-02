@@ -1,5 +1,3 @@
-/* eslint-disable no-undef */
-
 /**
  * Runs all marketplace-cursor-sync test scenarios: backup .cursor,
  * run disabled (clean slate), enabled (create), disabled (remove), enabled (recreate),

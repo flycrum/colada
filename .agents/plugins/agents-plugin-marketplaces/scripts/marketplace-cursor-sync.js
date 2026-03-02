@@ -7,6 +7,12 @@
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import {
+  getExcludedPluginsFromEnv,
+  loadLocalEnv,
+  parseEnableArg,
+  readEnv,
+} from './common/env-loader.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.resolve(__dirname, '..', '..', '..', '..');
@@ -18,69 +24,13 @@ const MANIFEST_FILE = path.join(CURSOR_DIR, '.colada-cursor-sync.json');
 const CURSOR_PLUGIN_SUBDIR = '.cursor-plugin';
 const PLUGIN_MANIFEST_FILENAME = 'plugin.json';
 const PLUGINS_EXCLUDED_FROM_SYNC = ['_plugin-example'];
-const ENV_FILE = '.env';
-const ENVRC_LOCAL = '.envrc.local';
-const ENABLE_ARG_PREFIX = '--enable=';
 const ENV_CURSOR_EXCLUDED_PLUGINS = 'CURSOR_EXCLUDED_PLUGINS';
 
-function parseEnvLine(line, callerEnv) {
-  const trimmed = line.trim();
-  if (!trimmed || trimmed.startsWith('#')) return;
-  let rest = trimmed;
-  if (rest.startsWith('export ')) rest = rest.slice(7).trim();
-  const pairs = [];
-  while (rest.length > 0) {
-    const keyMatch = rest.match(/^([A-Za-z_][A-Za-z0-9_]*)=/);
-    if (!keyMatch) break;
-    const key = keyMatch[1];
-    rest = rest.slice(keyMatch[0].length);
-    let value;
-    if (rest.startsWith('"')) {
-      const end = rest.indexOf('"', 1);
-      value = end === -1 ? rest : rest.slice(1, end);
-      rest = end === -1 ? '' : rest.slice(end + 1).trim();
-    } else if (rest.startsWith("'")) {
-      const end = rest.indexOf("'", 1);
-      value = end === -1 ? rest : rest.slice(1, end);
-      rest = end === -1 ? '' : rest.slice(end + 1).trim();
-    } else {
-      const unquoted = rest.match(/^(\S+)/);
-      value = unquoted ? unquoted[1] : rest;
-      rest = unquoted ? rest.slice(unquoted[1].length).trim() : '';
-    }
-    pairs.push([key, value]);
-  }
-  for (const [key, value] of pairs) {
-    if (!callerEnv.has(key)) process.env[key] = value;
-  }
-}
-
-function loadLocalEnv() {
-  const callerEnv = new Set(Object.keys(process.env));
-  const envFiles = [path.join(ROOT, ENV_FILE), path.join(ROOT, ENVRC_LOCAL)];
-  for (const file of envFiles) {
-    if (!fs.existsSync(file)) continue;
-    const raw = fs.readFileSync(file, 'utf8');
-    for (const line of raw.split('\n')) parseEnvLine(line, callerEnv);
-  }
-}
-
-function readEnv(key, def = 'false') {
-  const v = process.env[key];
-  return v === undefined || v === '' ? def : v;
-}
-
-function getExcludedPluginsFromEnv() {
-  const raw = process.env[ENV_CURSOR_EXCLUDED_PLUGINS];
-  if (raw === undefined || raw === '') return [];
-  return raw
-    .split(',')
-    .map((s) => s.trim())
-    .filter(Boolean);
-}
-
 function listPluginDirNames() {
-  const excluded = [...PLUGINS_EXCLUDED_FROM_SYNC, ...getExcludedPluginsFromEnv()];
+  const excluded = [
+    ...PLUGINS_EXCLUDED_FROM_SYNC,
+    ...getExcludedPluginsFromEnv(ENV_CURSOR_EXCLUDED_PLUGINS),
+  ];
   const entries = fs.readdirSync(PLUGINS_DIR, { withFileTypes: true });
   const names = [];
   for (const ent of entries) {
@@ -190,16 +140,9 @@ function disable() {
   }
 }
 
-function parseEnableArg() {
-  const arg = process.argv.find((a) => a.startsWith(ENABLE_ARG_PREFIX));
-  if (!arg) return null;
-  const value = arg.slice(ENABLE_ARG_PREFIX.length).toLowerCase();
-  return value === 'true';
-}
-
 function main() {
   try {
-    loadLocalEnv();
+    loadLocalEnv(ROOT);
     const forceEnable = parseEnableArg();
     const enabled =
       forceEnable !== null

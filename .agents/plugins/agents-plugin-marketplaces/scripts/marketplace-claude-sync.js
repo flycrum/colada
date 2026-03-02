@@ -10,6 +10,12 @@
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import {
+  getExcludedPluginsFromEnv,
+  loadLocalEnv,
+  parseEnableArg,
+  readEnv,
+} from './common/env-loader.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 /** Repo root: script lives at .agents/plugins/agents-plugin-marketplaces/scripts/ */
@@ -32,70 +38,8 @@ const MARKETPLACE_KEY_OWNER = 'owner';
 const MARKETPLACE_KEY_PLUGINS = 'plugins';
 /** Number of top-level keys in our canonical marketplace JSON (name, owner, plugins). */
 const CANONICAL_MARKETPLACE_KEYS_COUNT = 3;
-const ENV_FILE = '.env';
-const ENVRC_LOCAL = '.envrc.local';
-const ENABLE_ARG_PREFIX = '--enable=';
 /** Env var for comma-separated plugin dir names to exclude (only when enabled). Ignored when ENABLE_LOCAL_AGENT_CLAUDE=false. */
 const ENV_CLAUDE_EXCLUDED_PLUGINS = 'CLAUDE_EXCLUDED_PLUGINS';
-
-/** Parse one or more KEY=value pairs from a line (handles "export A=b C=d" or "A=b"). Skip keys in callerEnv (caller-set env wins over file). */
-function parseEnvLine(line, callerEnv) {
-  const trimmed = line.trim();
-  if (!trimmed || trimmed.startsWith('#')) return;
-  let rest = trimmed;
-  if (rest.startsWith('export ')) rest = rest.slice(7).trim();
-  const pairs = [];
-  while (rest.length > 0) {
-    const keyMatch = rest.match(/^([A-Za-z_][A-Za-z0-9_]*)=/);
-    if (!keyMatch) break;
-    const key = keyMatch[1];
-    rest = rest.slice(keyMatch[0].length);
-    let value;
-    if (rest.startsWith('"')) {
-      const end = rest.indexOf('"', 1);
-      value = end === -1 ? rest : rest.slice(1, end);
-      rest = end === -1 ? '' : rest.slice(end + 1).trim();
-    } else if (rest.startsWith("'")) {
-      const end = rest.indexOf("'", 1);
-      value = end === -1 ? rest : rest.slice(1, end);
-      rest = end === -1 ? '' : rest.slice(end + 1).trim();
-    } else {
-      const unquoted = rest.match(/^(\S+)/);
-      value = unquoted ? unquoted[1] : rest;
-      rest = unquoted ? rest.slice(unquoted[1].length).trim() : '';
-    }
-    pairs.push([key, value]);
-  }
-  for (const [key, value] of pairs) {
-    if (!callerEnv.has(key)) process.env[key] = value;
-  }
-}
-
-/** Load .env and .envrc.local from repo root so script uses current file state (not parent env only). Env vars set by the caller (e.g. tests) are not overwritten by files. */
-function loadLocalEnv() {
-  const callerEnv = new Set(Object.keys(process.env));
-  const envFiles = [path.join(ROOT, ENV_FILE), path.join(ROOT, ENVRC_LOCAL)];
-  for (const file of envFiles) {
-    if (!fs.existsSync(file)) continue;
-    const raw = fs.readFileSync(file, 'utf8');
-    for (const line of raw.split('\n')) parseEnvLine(line, callerEnv);
-  }
-}
-
-function readEnv(key, def = 'false') {
-  const v = process.env[key];
-  return v === undefined || v === '' ? def : v;
-}
-
-/** Plugin dir names from CLAUDE_EXCLUDED_PLUGINS (comma-separated). Only applied when enabled; safe to set when disabled. */
-function getExcludedPluginsFromEnv() {
-  const raw = process.env[ENV_CLAUDE_EXCLUDED_PLUGINS];
-  if (raw === undefined || raw === '') return [];
-  return raw
-    .split(',')
-    .map((s) => s.trim())
-    .filter(Boolean);
-}
 
 /** Set of plugin dir names that exist under PLUGINS_DIR with .claude-plugin/plugin.json (excluding only hardcoded list). */
 function listActualPluginDirNames() {
@@ -117,7 +61,7 @@ function listActualPluginDirNames() {
 
 /** Report CLAUDE_EXCLUDED_PLUGINS names that are not found (typo, renamed). Non-existent names are allowed; we only report. */
 function reportUnknownExcludedPlugins() {
-  const fromEnv = getExcludedPluginsFromEnv();
+  const fromEnv = getExcludedPluginsFromEnv(ENV_CLAUDE_EXCLUDED_PLUGINS);
   if (fromEnv.length === 0) return;
   const actual = listActualPluginDirNames();
   const unknown = fromEnv.filter((name) => !actual.has(name));
@@ -129,7 +73,10 @@ function reportUnknownExcludedPlugins() {
 }
 
 function discoverPlugins() {
-  const excluded = [...PLUGINS_EXCLUDED_FROM_MARKETPLACE, ...getExcludedPluginsFromEnv()];
+  const excluded = [
+    ...PLUGINS_EXCLUDED_FROM_MARKETPLACE,
+    ...getExcludedPluginsFromEnv(ENV_CLAUDE_EXCLUDED_PLUGINS),
+  ];
   const entries = fs.readdirSync(PLUGINS_DIR, { withFileTypes: true });
   const plugins = [];
   for (const ent of entries) {
@@ -314,20 +261,12 @@ function disable(patch) {
   }
 }
 
-/** Parse --enable=true|false from argv; overrides env when present. */
-function parseEnableArg() {
-  const arg = process.argv.find((a) => a.startsWith(ENABLE_ARG_PREFIX));
-  if (!arg) return null;
-  const value = arg.slice(ENABLE_ARG_PREFIX.length).toLowerCase();
-  return value === 'true';
-}
-
 async function main() {
   try {
     const pkg = await import('fast-json-patch');
     const api = pkg.default || pkg;
     const patch = { applyPatch: api.applyPatch, validate: api.validate };
-    loadLocalEnv();
+    loadLocalEnv(ROOT);
     const forceEnable = parseEnableArg();
     const enabled =
       forceEnable !== null

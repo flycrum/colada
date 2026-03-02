@@ -18,4 +18,8 @@ export default [
     files: ['scripts/**/*.js'],
     languageOptions: { globals: { ...globals.node } },
   },
+  {
+    files: ['.agents/plugins/agents-plugin-marketplaces/scripts/**/*.js'],
+    languageOptions: { globals: { ...globals.node } },
+  },
 ];

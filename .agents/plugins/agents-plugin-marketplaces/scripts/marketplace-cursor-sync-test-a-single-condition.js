@@ -1,5 +1,3 @@
-/* eslint-disable no-undef */
-
 /**
  * Runs marketplace-cursor-sync.js with a forced enable/disable and asserts the resulting
  * filesystem state. Not part of vitest; run via marketplace-cursor-sync-test-all-conditions.js
@@ -64,8 +62,6 @@ function assertEnabled() {
 function assertEnabledWithExclusions() {
   const errors = assertEnabled();
   if (errors.length > 0) return errors;
-  const manifest = JSON.parse(fs.readFileSync(MANIFEST_FILE, 'utf8'));
-  const commands = manifest.commands || [];
   const excludedNames = TEST_EXCLUDED_PLUGINS.split(',')
     .map((s) => s.trim())
     .filter(Boolean);

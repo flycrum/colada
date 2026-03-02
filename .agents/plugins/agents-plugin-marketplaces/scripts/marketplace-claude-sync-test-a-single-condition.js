@@ -1,5 +1,3 @@
-/* eslint-disable no-undef */
-
 /**
  * Runs marketplace-claude-sync.js with a forced enable/disable and asserts the resulting
  * filesystem state. Not part of vitest; run via marketplace-claude-sync-test-all-conditions.js

@@ -7,7 +7,7 @@ Env-gated sync for Claude Code local marketplace. Invoked from root by the **git
 ## Requirements
 
 - **Never break the caller:** On any error (including missing fast-json-patch) script must exit 0 so git post-merge or manual invocations never fail. Uses fast-json-patch for applyOps; dynamic import so missing dep is caught and exited 0
-- **Env:** Before reading env, load `.env` then `.envrc.local` from repo root (`loadLocalEnv()`). Lines may contain multiple KEY=value pairs (e.g. `export ENABLE_LOCAL_AGENT_CLAUDE=true CLAUDE_EXCLUDED_PLUGINS=env-variables,turborepo`). Then read `ENABLE_LOCAL_AGENT_CLAUDE`; default `'false'`. Treat only `'true'` (case-insensitive) as enabled; any other value runs disable logic
+- **Env:** Before reading env, load `.env` then `.envrc.local` from repo root via shared [common/env-loader.js](./common/env-loader.js) (`loadLocalEnv(root)`). Lines may contain multiple KEY=value pairs (e.g. `export ENABLE_LOCAL_AGENT_CLAUDE=true CLAUDE_EXCLUDED_PLUGINS=env-variables,turborepo`). Then read `ENABLE_LOCAL_AGENT_CLAUDE`; default `'false'`. Treat only `'true'` (case-insensitive) as enabled; any other value runs disable logic
 - **Run context:** Execute from repo root; ROOT = `path.resolve(__dirname, '..', '..', '..', '..')` (script lives under .agents/plugins/agents-plugin-marketplaces/scripts/)
 - **Enable (ENABLE_LOCAL_AGENT_CLAUDE=true):**
   - **Target files:** `.claude-plugin/marketplace.json`, `.claude/settings.json`

@@ -1,5 +1,3 @@
-/* eslint-disable no-undef */
-
 /**
  * Runs all marketplace-claude-sync test scenarios: backup .claude and .claude-plugin,
  * run disabled (clean slate), enabled (create), disabled (surgical remove), enabled (surgical edit),
