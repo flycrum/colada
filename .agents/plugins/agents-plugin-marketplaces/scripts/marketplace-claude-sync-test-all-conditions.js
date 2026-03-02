@@ -1,9 +1,9 @@
 /* eslint-disable no-undef */
 
 /**
- * Runs all sync-claude-marketplace test scenarios: backup .claude and .claude-plugin,
+ * Runs all marketplace-claude-sync test scenarios: backup .claude and .claude-plugin,
  * run disabled (clean slate), enabled (create), disabled (surgical remove), enabled (surgical edit),
- * then restore. Not part of vitest. Run: pnpm run marketplace-claude:test-sync
+ * then restore. Not part of vitest. Run: pnpm run marketplace-claude:sync-test
  */
 
 import { spawnSync } from 'child_process';
@@ -18,7 +18,7 @@ const CLAUDE_DIR = path.join(ROOT, '.claude');
 const PLUGIN_DIR = path.join(ROOT, '.claude-plugin');
 const BACKUP_CLAUDE = path.join(ROOT, '.claude-testing-123');
 const BACKUP_PLUGIN = path.join(ROOT, '.claude-plugin-testing-123');
-const SINGLE_TEST = path.join(__dirname, 'sync-claude-marketplace-test-a-single-condition.js');
+const SINGLE_TEST = path.join(__dirname, 'marketplace-claude-sync-test-a-single-condition.js');
 const testStepsAll = [
   ['disabled', 'clean slate'],
   ['enabled', 'create files'],

@@ -1,9 +1,9 @@
 /* eslint-disable no-undef */
 
 /**
- * Runs sync-claude-marketplace.js with a forced enable/disable and asserts the resulting
- * filesystem state. Not part of vitest; run via sync-claude-marketplace-test-all-conditions.js
- * or directly: node .../sync-claude-marketplace-test-a-single-condition.js <mode>
+ * Runs marketplace-claude-sync.js with a forced enable/disable and asserts the resulting
+ * filesystem state. Not part of vitest; run via marketplace-claude-sync-test-all-conditions.js
+ * or directly: node .../marketplace-claude-sync-test-a-single-condition.js <mode>
  * Modes: enabled | disabled | enabled-with-excluded-plugins | disabled-with-excluded-plugins
  */
 
@@ -18,7 +18,7 @@ const ROOT = path.resolve(__dirname, '..', '..', '..', '..');
 const MARKETPLACE_NAME = 'colada-plugins';
 const MARKETPLACE_FILE = path.join(ROOT, '.claude-plugin', 'marketplace.json');
 const SETTINGS_FILE = path.join(ROOT, '.claude', 'settings.json');
-const SCRIPT = path.join(__dirname, 'sync-claude-marketplace.js');
+const SCRIPT = path.join(__dirname, 'marketplace-claude-sync.js');
 const SETTINGS_KEY_EXTRA_KNOWN_MARKETPLACES = 'extraKnownMarketplaces';
 const SETTINGS_KEY_ENABLED_PLUGINS = 'enabledPlugins';
 const MARKETPLACE_KEY_NAME = 'name';
@@ -162,7 +162,7 @@ function main() {
   const arg = process.argv[2];
   if (!VALID_MODES.includes(arg)) {
     console.error(
-      `Usage: node sync-claude-marketplace-test-a-single-condition.js <${VALID_MODES.join('|')}>`
+      `Usage: node marketplace-claude-sync-test-a-single-condition.js <${VALID_MODES.join('|')}>`
     );
     process.exit(1);
   }
@@ -173,7 +173,7 @@ function main() {
     : { CLAUDE_EXCLUDED_PLUGINS: '' };
   const result = runSync(enable, envOverrides);
   if (result.status !== 0) {
-    console.error('sync-claude-marketplace.js exited with', result.status);
+    console.error('marketplace-claude-sync.js exited with', result.status);
     if (result.stderr) console.error(result.stderr);
     process.exit(1);
   }

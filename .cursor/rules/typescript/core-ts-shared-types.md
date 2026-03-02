@@ -1,0 +1,1 @@
+../../../.agents/plugins/typescript/rules/core-ts-shared-types.md

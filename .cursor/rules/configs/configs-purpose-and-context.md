@@ -1,0 +1,1 @@
+../../../.agents/plugins/configs/rules/configs-purpose-and-context.md

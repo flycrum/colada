@@ -3,7 +3,7 @@
  * When ENABLE_LOCAL_AGENT_CLAUDE=true: create or surgically update
  * .claude-plugin/marketplace.json and .claude/settings.json.
  * When false: surgically remove only our fields (clean slate).
- * Invoked by .githooks/post-merge (after git pull) and via pnpm run marketplace-claude-sync.
+ * Invoked by .githooks/post-merge (after git pull) and via pnpm run marketplace-claude:sync.
  * Uses fast-json-patch (RFC 6902) for surgical edits. On any error exits 0 so the caller never fails.
  */
 

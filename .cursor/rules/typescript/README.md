@@ -1,0 +1,1 @@
+../../../.agents/plugins/typescript/rules/README.md

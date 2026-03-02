@@ -1,0 +1,1 @@
+../../../.agents/plugins/agents-plugin-marketplaces/rules/sync-after-plugin-changes.md

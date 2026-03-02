@@ -10,7 +10,7 @@ Run once per clone (or use `pnpm run setup:githooks` from repo root).
 
 ## Hooks used
 
-- **post-merge** — Runs only after a successful **`git merge`**. So it runs after a default **`git pull`** that actually merges (fetched new commits). It **does not** run when: **`git pull`** says "Already up to date" (no merge), **`git pull --rebase`**, or when `pull.rebase` is true. Used to run [.agents/plugins/agents-plugin-marketplaces/scripts/sync-claude-marketplace.js](../.agents/plugins/agents-plugin-marketplaces/scripts/sync-claude-marketplace.js) so the Claude local marketplace and settings are updated after pull (reads `ENABLE_LOCAL_AGENT_CLAUDE` from `.envrc.local` / `.env`). If you pull with rebase or nothing was new, run `pnpm run marketplace-claude-sync` when you want to sync.
+- **post-merge** — Runs only after a successful **`git merge`**. So it runs after a default **`git pull`** that actually merges (fetched new commits). It **does not** run when: **`git pull`** says "Already up to date" (no merge), **`git pull --rebase`**, or when `pull.rebase` is true. Runs [marketplace-claude-sync.js](../.agents/plugins/agents-plugin-marketplaces/scripts/marketplace-claude-sync.js) and [marketplace-cursor-sync.js](../.agents/plugins/agents-plugin-marketplaces/scripts/marketplace-cursor-sync.js) so Claude local marketplace/settings and Cursor commands/rules stay in sync after pull (read `ENABLE_LOCAL_AGENT_CLAUDE` and `ENABLE_LOCAL_AGENT_CURSOR` from `.envrc.local` / `.env`). If you pull with rebase or nothing was new, run `pnpm run marketplace-claude-sync` and `pnpm run marketplace-cursor-sync` when you want to sync.
 
 ## Other hook options (not used here)
 

@@ -13,7 +13,7 @@ coverage/
 .envrc.local
 *.local
 
-# Script-generated / local Claude Code state (sync-claude-marketplace.js; do not commit)
+# Script-generated / local Claude Code state (marketplace-claude-sync.js; do not commit)
 .claude-plugin/
 .claude/
 

@@ -1,0 +1,1 @@
+../../../.agents/plugins/agents-plugin-marketplaces/rules/enable-flags-and-script.md

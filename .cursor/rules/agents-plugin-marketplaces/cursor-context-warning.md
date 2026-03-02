@@ -1,0 +1,1 @@
+../../../.agents/plugins/agents-plugin-marketplaces/rules/cursor-context-warning.md

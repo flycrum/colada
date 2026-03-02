@@ -1,0 +1,1 @@
+../../.agents/plugins/agents-plugin-marketplaces/commands/add-colada-marketplace.md
